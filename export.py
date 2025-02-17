@@ -1,4 +1,5 @@
 from faceting import Generate, FacetAll
+from plot import MakePlot
 
 def ExportToOFF(vertices, face, group, directory, name):
     #faces with symmetry will have duplicates under Generate.
@@ -22,6 +23,8 @@ def ExportToOFF(vertices, face, group, directory, name):
     
     for f in faces:
         file.write(str(len(f))+" "+" ".join(str(i) for i in f)+"\n")
+    
+    MakePlot(vertices, face, group, name)
 
 def ExportAllFacetings(vertices, group, directory, name):
     facetings = FacetAll(vertices, group)
