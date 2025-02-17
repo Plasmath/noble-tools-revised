@@ -2,23 +2,28 @@ import groups
 import vertices
 import config
 from numpy import cross
+from numpy.linalg import norm
 
 def Generate(S,group):
     return [groups.Compose(g,S) for g in group]
 
 def PlaneStabilizer(plane,group):
-    for g in group:
-        print(list(sorted(groups.Compose(g,plane))), list(sorted(plane)))
-    
     return [g for g in group if list(sorted(groups.Compose(g,plane)))==list(sorted(plane))]
+
+def FilterPlanes(planes, group):
+    filteredplanes = []
+    allplanes = []
+    for p in planes:
+        if not (p in allplanes):
+            allplanes += [tuple(sorted(q)) for q in Generate(p, group) if (0 in q)]
+            filteredplanes.append(p)
+    return filteredplanes
 
 def IsValid(face,stabilizer,plane):
     edges = [list(sorted([face[i],face[(i+1)%len(face)]])) for i in range(len(face))]
-    #print(edges)
     
     for e in edges:
         iterator = [(list(sorted(i)) in edges) for i in Generate(e,stabilizer)]
-        #print(iterator, any(iterator), all(iterator))
         if any(iterator) and not all(iterator):
             return False
     return True
@@ -84,14 +89,6 @@ def FacetAll(orbit, group): #Find all facetings of an orbit in all possible plan
     
     #find facetings in each plane
     facetings = []
-    for plane in planes:
+    for plane in FilterPlanes(planes, group):
         facetings += FindFacetings(orbit, group, plane)
     return facetings
-    
-V = vertices.GenerateVStar532(1, 0, 0)
-f = FindFacetings(V, groups.DGroupStar532, [0, 3, 13, 4, 19, 14])
-
-print([tuple(V[i]) for i in [0, 3, 4, 13, 14, 15]])
-
-
-#print(f,len(f))

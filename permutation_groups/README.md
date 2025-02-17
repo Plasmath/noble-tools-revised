@@ -1,1 +1,0 @@
-The transitive actions of each orbit type under each valid symmetry are stored with each element of the group being stored as a permutation of a certain numbering of the orbit. See vertices.py.
