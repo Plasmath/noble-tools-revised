@@ -78,6 +78,34 @@ def InitializeSymbolic(): #initialize basis vectors and matrices for symbolic mo
     v2ico = np.array([0,1,phi])
     v3ico = np.array([0,0,2*phi])
 
+def InitializeNumeric(): #initialize basis vectors and matrices for numeric mode
+    global phi
+    global root2
+    global r3ico
+    global v1tet
+    global v2tet
+    global v3tet
+    global v2oct
+    global v3oct
+    global v1ico
+    global v2ico
+    global v3ico
+
+    phi = ( 1 + np.sqrt(5) ) / 2
+    root2 = np.sqrt(2)
+    
+    r3ico = 0.5 * np.array([[1-phi,  -phi,     1],
+                            [ -phi,     1, phi-1],
+                            [    1, phi-1,   phi]])
+    v1tet = np.array([-root2/2, root2/2, root2/2])
+    v2tet = np.array([ root2/2, root2/2, root2/2])
+    v3tet = np.array([ 0, 0, root2])
+    v2oct = np.array([0,root2,root2])
+    v3oct = np.array([0,0,root2])
+    v1ico = np.array([1,0,phi+1])
+    v2ico = np.array([0,1,phi])
+    v3ico = np.array([0,0,2*phi])
+
 def RoundArray(array):
     return array.round(decimals = config.numericPrecision)
 

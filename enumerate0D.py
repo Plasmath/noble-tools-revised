@@ -11,7 +11,6 @@ ID = groups.IDbase
 
 #T orbit type
 ExportAllFacetings(T, groups.TGroupStar332, "3dmodels", "TStar332")
-
 ExportAllFacetings(T, groups.TGroup332, "3dmodels", "T332")
 
 #O orbit type

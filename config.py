@@ -4,7 +4,7 @@ from sympy import Symbol
 useSymbolic = False
 
 #Number of digits of precision to use when rounding
-numericPrecision = 8
+numericPrecision = 12
 
 #Parameters used within symbolic calculations, convenient to put here
 a = Symbol("a")

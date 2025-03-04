@@ -3,25 +3,18 @@ import numpy as np
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from mpl_toolkits.mplot3d.art3d import Line3DCollection
 from faceting import Generate
-from matplotlib import cm
-from matplotlib.colors import LightSource
 
 def GeneratePolyhedronPlot(vertices,edges,face,name):
     faceCoordinates = np.array([ [vertices[i] for i in face+[face[0]]] ])
     edgeCoordinates = np.array([ [vertices[e[0]],vertices[e[1]]] for e in edges ])
     
-    norms = np.array([e[0][0]*e[0][0]+e[0][1]*e[0][1]+e[0][2]*e[0][2]+
-             e[1][0]*e[1][0]+e[1][1]*e[1][1]+e[1][2]*e[1][2] for e in edgeCoordinates])
-    ls = LightSource(270, 45)
-    rgb = ls.shade(norms, cmap=cm.gist_earth)
-    
     ax = plt.figure().add_subplot(projection='3d')
     
-    edgeCollection = Line3DCollection(edgeCoordinates, cmap=cm.coolwarm, linewidth=0.5, facecolors=rgb)
+    edgeCollection = Line3DCollection(edgeCoordinates, linewidth=0.5)
     
     ax.add_collection3d(edgeCollection)
     
-    faceCollection = Poly3DCollection(faceCoordinates, alpha=.7, color="gray")
+    faceCollection = Poly3DCollection(faceCoordinates, alpha=1, color="gray")
     ax.add_collection3d(faceCollection)
     
     

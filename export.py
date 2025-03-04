@@ -24,9 +24,10 @@ def ExportToOFF(vertices, face, group, directory, name):
     for f in faces:
         file.write(str(len(f))+" "+" ".join(str(i) for i in f)+"\n")
     
-    MakePlot(vertices, face, group, name)
+    #MakePlot(vertices, face, group, name)
 
-def ExportAllFacetings(vertices, group, directory, name):
-    facetings = FacetAll(vertices, group)
+def ExportAllFacetings(vertices, group, directory, name, ignoreTriangles = False):
+    facetings = FacetAll(vertices, group, ignoreTriangles)
     for i in range(len(facetings)):
+        print(name+"."+str(i))
         ExportToOFF(vertices, facetings[i], group, directory, name+"."+str(i))
