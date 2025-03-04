@@ -17,26 +17,30 @@ def FilterPlanes(planes, group):
             filteredplanes.append(p)
     return filteredplanes
 
-def IsCompound(edges,orbitSize): #Checks if a polyhedron is a compound
-    adj = {i:{j for j in range(orbitSize) if (i,j) in edges or (j,i) in edges} for i in range(orbitSize)}
+def IsCompound(faces): #Checks if a polyhedron is a compound
+    numFaces = len(faces)
+    
+    adj = {i:{j for j in range(numFaces) if len(set(faces[i]).intersection(set(faces[j]))) == 2} for i in range(numFaces)}
+    
     connectedComponent = {0}
-    for i in range(orbitSize):
+    for i in range(numFaces):
         newConnectedComponent = connectedComponent.copy()
         for j in connectedComponent:
-            newConnectedComponent = connectedComponent.union(adj[i])
+            newConnectedComponent = newConnectedComponent.union(adj[j])
         if newConnectedComponent == connectedComponent:
             break
         connectedComponent = newConnectedComponent
-    return len(connectedComponent) != orbitSize
+    return len(connectedComponent) != numFaces
 
 def IsValid(face,group,orbitSize): #Removes invalid facetings which do not have 2 faces to an edge.
     faces = Generate(face,group)
+    
+    if IsCompound(faces):
+        return False
+    
     edges = list(GetEdgesOfFace(face))
     combinedEdges = list({GetEdgesOfFace(face) for face in faces})
     totalEdges = sum((list(i) for i in combinedEdges), [])
-    
-    if IsCompound(totalEdges, orbitSize):
-        return False
     
     for e in edges:
         if totalEdges.count(e) != 2: #checks if this edge appears in exactly 2 faces
@@ -89,7 +93,7 @@ def FindFacetings(orbit, group, plane, minCycleLength = 3): #Find facetings of a
     filtered = [cycle for cycle in cycles if cycle[1] < cycle[-1]]
     
     #return only valid facetings
-    return [cycle for cycle in filtered] #if IsValid(cycle, group, len(orbit))]
+    return [cycle for cycle in filtered if IsValid(cycle, group, len(orbit))]
 
 def GetPlane(ind1,ind2,ind3,orbit):
     p1,p2,p3 = orbit[ind1],orbit[ind2],orbit[ind3]
