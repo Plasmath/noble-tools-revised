@@ -1,6 +1,17 @@
 from faceting import Generate, FacetAll
 from plot import MakePlot
 
+summary = open("3dmodels/summary.txt","w")
+
+summary.write(
+"""NOTE: These polynomials are not simplified. In almost all cases,
+there is a simpler factor of the given polynomial that gives the same root.
+
+"""
+)
+
+summary.close()
+
 def ExportToOFF(vertices, face, group, directory, name):
     #faces with symmetry will have duplicates under Generate.
     #This filters those extra faces out.
@@ -26,8 +37,15 @@ def ExportToOFF(vertices, face, group, directory, name):
     
     #MakePlot(vertices, face, group, name)
 
-def ExportAllFacetings(vertices, group, directory, name, ignoreTriangles = False):
+def ExportAllFacetings(vertices, group, directory, name, ignoreTriangles = False, poly = None):
     facetings = FacetAll(vertices, group, ignoreTriangles)
     for i in range(len(facetings)):
         print(name+"."+str(i))
         ExportToOFF(vertices, facetings[i], group, directory, name+"."+str(i))
+        
+    if len(facetings) > 0:
+        summary = open("3dmodels/summary.txt","a")
+        
+        summary.write("The parameter of the "+name+" orbit is a positive root of the following polynomial: "+str(poly)+"\n")
+        
+        summary.close()

@@ -63,36 +63,103 @@ def ConfigurationEntry(p,q,r,s):
              q[2]*r[1]*s[0] - q[1]*r[2]*s[0] + q[0]*r[2]*s[1] - q[0]*r[1]*s[2])
     return sp.expand(expr)
 
-def MergePlanes(planes,newPlane):
-    mergedPlanes = []
-    mergingPlane = set(newPlane)
-    for p in planes:
-        intersectionSize = len(set(p) & set(newPlane))
-        if intersectionSize >= 2:
-            mergingPlane = mergingPlane.union(set(p))
-        else:
-            mergedPlanes.append(p)
-    
-    return mergedPlanes + [tuple(mergingPlane)]
-
 def VolumeConfiguration(orbitType):
-    Conf = []
+    Conf = dict()
     for i in range(1,len(orbitType)):
-        print(i)
         for j in range(i+1,len(orbitType)):
             for k in range(j+1,len(orbitType)):
                 entry = ConfigurationEntry(orbitType[0],orbitType[i],orbitType[j],orbitType[k])
-                Conf.append(entry)
+                Conf[entry] = Conf.setdefault(entry,[])+[(i,j,k)]
     return Conf
 
-def Get1DOrbitRoots(orbitType, var):
+def MergePlanes(triangles):
+    tris = [set(t) for t in sorted(triangles)]
+    
+    planes = []
+    for t in tris:
+        planes.append(t)
+        
+        planesToDelete = set()
+        for i in range(len(planes)):
+            for j in range(i+1,len(planes)):
+                if len(planes[i] & planes[j]) > 1:
+                    planes[i] = planes[i].union(planes[j])
+                    planesToDelete.add(j)
+        
+        for j in reversed(list(planesToDelete)):
+            del planes[j]
+    
+    return planes
+
+def ResultantFilter(factorDict, extension):
+    factorList = list(factorDict.keys())
+    
+    factorsToRemove = set()
+    
+    for i in range(len(factorList)):
+        F = factorList[i]
+        for j in range(i+1,len(factorList)):
+            G = factorList[j]
+            if sp.resultant(F, G) == 0:
+                gcd = sp.gcd(F, G, extension=extension)
+                if gcd == 1:
+                    raise "Error in resultant filter!"
+                
+                factorsToRemove.add(F)
+                factorsToRemove.add(G)
+                
+                factorDict[gcd] = MergePlanes(set(factorDict[F]).union(set(factorDict[G])))
+                factorDict[sp.expand(F/gcd)] = factorDict[F]
+                factorDict[sp.expand(G/gcd)] = factorDict[G]
+    
+    for F in factorsToRemove:
+        del factorDict[F]
+    
+    return factorDict
+
+def Copr(Conf, numVerts, bannedFactors = []):
+    numTriples = (numVerts-1)*(numVerts-2)*(numVerts-3)/6
+    
+    #Initial factoring attempt
+    initialFactors = set()
+    initialFactorsDict = dict()
+    
+    for c in Conf.keys():
+        
+        factors = [f[0] for f in sp.factor_list(c)[1]]
+        
+        for f in factors:
+            if f in bannedFactors:
+                continue
+            
+            initialFactorsDict[f] = initialFactorsDict.setdefault(f,set()).union(set(Conf[c]))
+            initialFactors.add(f)
+    
+    for c in initialFactorsDict.keys():
+        initialFactorsDict[c] = MergePlanes(initialFactorsDict[c])
+    
+    
+    print(initialFactorsDict)
+    
+    print(ResultantFilter(initialFactorsDict, [sp.sqrt(2)]))
+    
+    #print( str(initialFactorsDict.keys()).replace("**","^").replace("sqrt(5)","\sqrt{5}").replace("sqrt(3)","\sqrt{3}").replace("sqrt(2)","\sqrt{2}") )
+
+def Get1DOrbitCandidates(orbitType, var, bannedFactors = []):
     Conf = VolumeConfiguration(orbitType)
+    
+    poly = Copr(Conf, len(orbitType), bannedFactors = bannedFactors)
+
+Get1DOrbitCandidates(tC, a, bannedFactors = [a,a+sp.sqrt(2)])
+
+#print(str([tuple(i) for i in tC]).replace("sqrt(2)","\sqrt{2}"))
+
+"""
+def Get1DOrbitRoots(Conf, var):
     roots = []
     numericalRoots = []
     
     for i in range(len(Conf)):
-        if i % 100 == 0:
-            print(i)
         entry = Conf[i]
         
         entryRoots = GetRoots(entry, var)
@@ -107,12 +174,12 @@ def DeepEval1D(orbitType,var,num):
                    p[1].evalf(subs={var:num}),
                    p[2].evalf(subs={var:num})]) for p in orbitType]
     
-def Enumerate1DOrbit(orbitType, group, var, directory, name):
-    roots = Get1DOrbitRoots(orbitType, var)
+def Enumerate1DOrbit(roots, orbitType, group, var, directory, name):
     config.useSymbolic = False
     vertices.InitializeNumeric()
     
     orbits = [DeepEval1D(orbitType, var, root[1]) for root in roots]
     
     for i in range(len(orbits)):
-        ExportAllFacetings(orbits[i], group, directory, name+".root"+str(roots[i][1]), ignoreTriangles=True)
+        ExportAllFacetings(orbits[i], group, directory, name+".root"+str(roots[i][1]), ignoreTriangles=True, poly=roots[i][0])
+"""
