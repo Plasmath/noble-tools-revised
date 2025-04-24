@@ -110,18 +110,21 @@ tTbase = GenerateVStar332(0, 1, 1)
 
 tTGroupStar332 = GeneratePermutationGroup(tTbase, genStar332, 10)
 tTGroup332 = GeneratePermutationGroup(tTbase, gen332, 10)
+tTGroups = [tTGroupStar332,tTGroup332]
 
 #rT orbit type.
 rTbase = GenerateVStar332(1, 1, 0)
 
 rTGroupStar332 = GeneratePermutationGroup(rTbase, genStar332, 10)
 rTGroup332 = GeneratePermutationGroup(rTbase, gen332, 10)
+rTGroups = [rTGroupStar332,rTGroup332]
 
 #rP orbit type. The base orbit under 332 symmetry is included within sT,
 #so facetings under that symmetry are enumerated when sT is.
 rPbase = GenerateV3Star2(0, 1, 1)
 
 rPGroup3Star2 = GeneratePermutationGroup(rPbase, gen3Star2, 10)
+rPGroups = [rPGroup3Star2]
 
 #tO orbit type. The base orbit under *332 symmetry is included within gT,
 #so facetings under that symmetry are enumerated when gT is.
@@ -129,6 +132,7 @@ tObase = GenerateVStar432(0, 1, 1)
 
 tOGroupStar432 = GeneratePermutationGroup(tObase, genStar432, 10)
 tOGroup432 = GeneratePermutationGroup(tObase, gen432, 10)
+tOGroups = [tOGroupStar432,tOGroup432]
 
 #tC orbit type.
 tCbase = GenerateVStar432(1, 1, 0)
@@ -136,6 +140,7 @@ tCbase = GenerateVStar432(1, 1, 0)
 tCGroup3Star2 = GeneratePermutationGroup(tCbase, gen3Star2, 10)
 tCGroupStar432 = GeneratePermutationGroup(tCbase, genStar432, 10)
 tCGroup432 = GeneratePermutationGroup(tCbase, gen432, 10)
+tCGroups = [tCGroupStar432,tCGroup432,tCGroup3Star2]
 
 #rC orbit type.
 rCbase = GenerateVStar432(1, 0, 1)
@@ -143,24 +148,28 @@ rCbase = GenerateVStar432(1, 0, 1)
 rCGroup3Star2 = GeneratePermutationGroup(rCbase, gen3Star2, 10)
 rCGroupStar432 = GeneratePermutationGroup(rCbase, genStar432, 10)
 rCGroup432 = GeneratePermutationGroup(rCbase, gen432, 10)
+rCGroups = [rCGroupStar432,rCGroup432,rCGroup3Star2]
 
 #tI orbit type.
 tIbase = GenerateVStar532(0, 1, 1)
 
 tIGroupStar532 = GeneratePermutationGroup(tIbase, genStar532, 14)
 tIGroup532 = GeneratePermutationGroup(tIbase, gen532, 14)
+tIGroups = [tIGroupStar532,tIGroup532]
 
 #tD orbit type.
 tDbase = GenerateVStar532(1, 0, 1)
 
 tDGroupStar532 = GeneratePermutationGroup(tDbase, genStar532, 14)
 tDGroup532 = GeneratePermutationGroup(tDbase, gen532, 14)
+tDGroups = [tDGroupStar532,tDGroup532]
 
 #rD orbit type.
 rDbase = GenerateVStar532(1, 1, 0)
 
 rDGroupStar532 = GeneratePermutationGroup(rDbase, genStar532, 14)
 rDGroup532 = GeneratePermutationGroup(rDbase, gen532, 14)
+rDGroups = [rDGroupStar532,rDGroup532]
 
 """
 

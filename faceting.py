@@ -48,7 +48,7 @@ def IsValid(face,group,orbitSize): #Removes invalid facetings which do not have 
     
     return True
 
-def FindFacetings(orbit, group, plane, minCycleLength = 3): #Find facetings of an orbit within a given plane.
+def FindFacetings(orbitSize, group, plane, minCycleLength = 3): #Find facetings of an orbit within a given plane.
     #NOTE: This may find certain extra invalid facetings which do not have two faces to an edge.
     #This is due to some edges in the plane requiring other edges in order to exist, which is not implemented.  
 
@@ -93,7 +93,7 @@ def FindFacetings(orbit, group, plane, minCycleLength = 3): #Find facetings of a
     filtered = [cycle for cycle in cycles if cycle[1] < cycle[-1]]
     
     #return only valid facetings
-    return [cycle for cycle in filtered if IsValid(cycle, group, len(orbit))]
+    return [cycle for cycle in filtered if IsValid(cycle, group, orbitSize)]
 
 def GetPlane(ind1,ind2,ind3,orbit):
     p1,p2,p3 = orbit[ind1],orbit[ind2],orbit[ind3]
@@ -116,5 +116,5 @@ def FacetAll(orbit, group, ignoreTriangles = False): #Find all facetings of an o
     #find facetings in each plane
     facetings = []
     for plane in FilterPlanes(planes, group):
-        facetings += FindFacetings(orbit, group, plane, minCycleLength = minCycleLength)
+        facetings += FindFacetings(orbitSize, group, plane, minCycleLength = minCycleLength)
     return facetings

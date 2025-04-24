@@ -4,9 +4,11 @@
 import vertices
 import config
 import sympy as sp
+import groups
 from numpy.polynomial import Polynomial
 from numpy import array,sqrt,real,imag
 from export import ExportAllFacetings
+from faceting import FindFacetings
 
 config.useSymbolic = True
 
@@ -72,56 +74,58 @@ def VolumeConfiguration(orbitType):
                 Conf[entry] = Conf.setdefault(entry,[])+[(i,j,k)]
     return Conf
 
-def MergePlanes(triangles):
-    tris = [set(t) for t in sorted(triangles)]
+def MergePlanes(planes):
+    plns = [set(t) for t in sorted(planes)]
     
-    planes = []
-    for t in tris:
-        planes.append(t)
+    mergedPlanes = []
+    for p in plns:
+        mergedPlanes.append(p)
         
         planesToDelete = set()
-        for i in range(len(planes)):
-            for j in range(i+1,len(planes)):
-                if len(planes[i] & planes[j]) > 1:
-                    planes[i] = planes[i].union(planes[j])
+        for i in range(len(mergedPlanes)):
+            for j in range(i+1,len(mergedPlanes)):
+                if len(mergedPlanes[i] & mergedPlanes[j]) > 1:
+                    mergedPlanes[i] = mergedPlanes[i].union(mergedPlanes[j])
                     planesToDelete.add(j)
         
         for j in reversed(list(planesToDelete)):
-            del planes[j]
+            del mergedPlanes[j]
     
-    return planes
+    return mergedPlanes
 
-def ResultantFilter(factorDict, extension):
-    factorList = list(factorDict.keys())
+#Obtain the set S_f for a given polynomial f as described in Theorem 3.21.
+#This is a recursive function, and we make a minor efficiency improvement
+#where if we calculate the greatest common divisor of f with a polynomial
+#it is not necessary to calculate that same divisor with one of the recursive
+#factors of f.
+def GetCoprimeSet(factorDict, f, planes, extension, startingIndex = 0):
     
-    factorsToRemove = set()
+    for i in range(startingIndex,len(factorDict)):
+        g = list(factorDict.keys())[i]
+        res = sp.resultant(f,g)
+        
+        if res == 0 and f != g: #Shared common factor
+            gcd = sp.gcd(f,g,extension=extension)
+            gcdPlanes = MergePlanes(planes+factorDict[g])
+            
+            if f == gcd: #f is a factor of g
+                continue
+            
+            if gcd.is_constant(): #The greatest common divisor was not calculated under a large enough field extension, so something went wrong
+                raise Exception("Error: constant GCD encountered. The following polynomials were involved: "+str(f)+", "+str(g))
+            
+            h = sp.quo(f,gcd) #Computes polynomial quotient between f and gcd: the polynomial h such that f = gcd*h + r when using Euclidean division.
+            #As we know already that gcd is a factor of f, r must be zero and this is the same as f/gcd.
+            
+            coprimeSetGCD = GetCoprimeSet(factorDict, gcd, gcdPlanes, extension, startingIndex=i)
+            coprimeSetH   = GetCoprimeSet(factorDict,   h,    planes, extension, startingIndex=i)
+            
+            return coprimeSetGCD + coprimeSetH #Disjoint union S_gcd(f,g) U S_h
     
-    for i in range(len(factorList)):
-        F = factorList[i]
-        for j in range(i+1,len(factorList)):
-            G = factorList[j]
-            if sp.resultant(F, G) == 0:
-                gcd = sp.gcd(F, G, extension=extension)
-                if gcd == 1:
-                    raise "Error in resultant filter!"
-                
-                factorsToRemove.add(F)
-                factorsToRemove.add(G)
-                
-                factorDict[gcd] = MergePlanes(set(factorDict[F]).union(set(factorDict[G])))
-                factorDict[sp.expand(F/gcd)] = factorDict[F]
-                factorDict[sp.expand(G/gcd)] = factorDict[G]
-    
-    for F in factorsToRemove:
-        del factorDict[F]
-    
-    return factorDict
+    return [(f,planes)]
 
-def Copr(Conf, numVerts, bannedFactors = []):
-    numTriples = (numVerts-1)*(numVerts-2)*(numVerts-3)/6
-    
+def Copr(Conf, numVerts, extension = []):
     #Initial factoring attempt
-    initialFactors = set()
     initialFactorsDict = dict()
     
     for c in Conf.keys():
@@ -129,30 +133,64 @@ def Copr(Conf, numVerts, bannedFactors = []):
         factors = [f[0] for f in sp.factor_list(c)[1]]
         
         for f in factors:
-            if f in bannedFactors:
-                continue
-            
             initialFactorsDict[f] = initialFactorsDict.setdefault(f,set()).union(set(Conf[c]))
-            initialFactors.add(f)
     
-    for c in initialFactorsDict.keys():
-        initialFactorsDict[c] = MergePlanes(initialFactorsDict[c])
+    keys = list(initialFactorsDict.keys())
+    for c in keys:
+        #Delete factors which have no negative coefficients, as these cannot have positive roots
+        if all(i >= 0 for i in sp.Poly(c,a).all_coeffs()):
+            del initialFactorsDict[c]
+        else:
+            initialFactorsDict[c] = MergePlanes(initialFactorsDict[c])
     
+    initialFactors = list(initialFactorsDict.keys())
     
-    print(initialFactorsDict)
+    filteredSets = sum((GetCoprimeSet(initialFactorsDict, f, initialFactorsDict[f], extension) for f in initialFactors),[])
     
-    print(ResultantFilter(initialFactorsDict, [sp.sqrt(2)]))
+    #The sets given may have multiple instances of the same polynomial, so we merge the planes of these together.
+    coprimeFactorsDict = dict()
     
-    #print( str(initialFactorsDict.keys()).replace("**","^").replace("sqrt(5)","\sqrt{5}").replace("sqrt(3)","\sqrt{3}").replace("sqrt(2)","\sqrt{2}") )
+    for i in range(len(filteredSets)):
+        s = filteredSets[i][0]
+        newPlanes = filteredSets[i][1]
+        
+        #Again, we do not need to consider factors which have no negative coefficients.
+        if all(i >= 0 for i in sp.Poly(s,a).all_coeffs()):
+            continue
+        
+        currentDictValue = coprimeFactorsDict.setdefault(s, [])
+        coprimeFactorsDict[s] = MergePlanes(newPlanes+currentDictValue)
+    
+    #Final check to make sure that no pair of polynomials shares a common factor.
+    for i in coprimeFactorsDict.keys():
+        for j in coprimeFactorsDict.keys():
+            if sp.resultant(i,j) == 0 and i != j:
+                raise Exception("Copr still has shared common factor between "+str(i)+" "+str(j))
+    
+    return list(coprimeFactorsDict.items())
 
-def Get1DOrbitCandidates(orbitType, var, bannedFactors = []):
+def GetCopr(orbitType, extension = [sqrt(2)]):
     Conf = VolumeConfiguration(orbitType)
+    return Copr(Conf, len(orbitType), extension = extension)
+
+def Get1DOrbitCandidates(orbitType, copr, group):
+    totalFacetings = []
     
-    poly = Copr(Conf, len(orbitType), bannedFactors = bannedFactors)
+    for s in copr:
+        facetings = []
+        planes = s[1]
+        for p in planes:
+            facetings += FindFacetings(len(orbitType), group, [0]+list(p), minCycleLength=4)
+        
+        if len(facetings) > 0:
+            totalFacetings.append((s[0],facetings))
+    
+    return totalFacetings
 
-Get1DOrbitCandidates(tC, a, bannedFactors = [a,a+sp.sqrt(2)])
-
-#print(str([tuple(i) for i in tC]).replace("sqrt(2)","\sqrt{2}"))
+tOcopr = GetCopr(tO, extension = [sp.sqrt(2)])
+for group in groups.tOGroups:
+    cand = Get1DOrbitCandidates(tO, tOcopr, group)
+    print(cand)
 
 """
 def Get1DOrbitRoots(Conf, var):

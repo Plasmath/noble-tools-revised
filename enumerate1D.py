@@ -5,26 +5,27 @@ import time
 startTime = time.time()
 
 #Volume configurations.
-print("Obtaining volume configurations for small orbit types (tT,rT,rP,tO,tC,rC)...")
-tTConf = VolumeConfiguration(tT)
-rTConf = VolumeConfiguration(rT)
-rPConf = VolumeConfiguration(rP)
-tOConf = VolumeConfiguration(tO)
-tCConf = VolumeConfiguration(tC)
-rCConf = VolumeConfiguration(rC)
+print("Obtaining coprime polynomials for small orbit types (tT,rT,rP,tO,tC,rC)...")
+tTCopr = GetCopr(tT)
+rTCopr = GetCopr(rT)
+rPCopr = GetCopr(rP)
+tOCopr = GetCopr(tO)
+tCCopr = GetCopr(tC)
+rCCopr = GetCopr(rC)
 
-print("Obtaining volume configuration for tI orbit type...")
-tIConf = VolumeConfiguration(tI)
+print("Obtaining coprime polynomials for tI orbit type...")
+tIConf = GetCopr(tI, extension=[sqrt(2),sqrt(5)])
 
-print("Obtaining volume configuration for tD orbit type...")
-tDConf = VolumeConfiguration(tD)
+print("Obtaining coprime polynomials for tD orbit type...")
+tDConf = GetCopr(tD, extension=[sqrt(2),sqrt(5)])
 
-print("Obtaining volume configuration for rD orbit type...")
-rDConf = VolumeConfiguration(rD)
+print("Obtaining coprime polynomials for rD orbit type...")
+rDConf = GetCopr(rD, extension=[sqrt(2),sqrt(5)])
 
 confTime = time.time()
-print("Total volume configuration time: %s seconds." % (confTime - startTime))
+print("Total coprime polynomial time: %s seconds." % (confTime - startTime))
 
+"""
 #Obtaining roots of entries within said volume configurations.
 print("Obtaining parameter roots for small orbit types (tT,rT,rP,tO,tC,rC)...")
 tTroots = Get1DOrbitRoots(tTConf, a)
@@ -86,3 +87,4 @@ Enumerate1DOrbit(rDroots, rD, groups.rDGroupStar532, a, "3dmodels", "rDStar532")
 enumTime = time.time()
 print("Total enumeration time: %s seconds." % (enumTime - rootTime))
 print("Total execution time: %s seconds." % (enumTime - startTime))
+"""

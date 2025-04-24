@@ -1,0 +1,3 @@
+NOTE: These polynomials are not simplified. In almost all cases,
+there is a simpler factor of the given polynomial that gives the same root.
+
