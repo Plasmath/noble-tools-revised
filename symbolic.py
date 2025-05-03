@@ -88,7 +88,7 @@ def MergePlanes(planes):
                     mergedPlanes[i] = mergedPlanes[i].union(mergedPlanes[j])
                     planesToDelete.add(j)
         
-        for j in reversed(list(planesToDelete)):
+        for j in reversed(sorted(planesToDelete)):
             del mergedPlanes[j]
     
     return mergedPlanes

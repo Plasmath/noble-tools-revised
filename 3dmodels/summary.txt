@@ -1,3 +1,12 @@
 NOTE: These polynomials are not simplified. In almost all cases,
 there is a simpler factor of the given polynomial that gives the same root.
 
+The parameter of the rP3Star2.1.61803398874989 orbit is a positive root of the following polynomial: a**2 - a - 1
+The parameter of the rP3Star2.1.61803398874989 orbit is a positive root of the following polynomial: a**2 - a - 1
+The parameter of the tOStar432.2.14789903570479 orbit is a positive root of the following polynomial: a**3 - a**2 - 2*a - 1
+The parameter of the tCStar432.1.00000000000000 orbit is a positive root of the following polynomial: a - 1
+The parameter of the tC432.1.00000000000000 orbit is a positive root of the following polynomial: a - 1
+The parameter of the tC3Star2.1.00000000000000 orbit is a positive root of the following polynomial: a - 1
+The parameter of the rCStar432.1.00000000000000 orbit is a positive root of the following polynomial: a - 1
+The parameter of the rC432.1.00000000000000 orbit is a positive root of the following polynomial: a - 1
+The parameter of the rC3Star2.1.00000000000000 orbit is a positive root of the following polynomial: a - 1

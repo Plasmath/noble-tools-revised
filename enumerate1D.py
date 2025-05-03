@@ -1,3 +1,6 @@
+print("Starting!")
+print("Note: Estimated runtime required to complete enumeration is approximately 30 minutes.")
+
 from symbolic1D import *
 import groups
 import time
@@ -14,13 +17,13 @@ tCCopr = GetCopr(tC)
 rCCopr = GetCopr(rC)
 
 print("Obtaining coprime polynomials for tI orbit type...")
-tICopr = GetCopr(tI, extension=[sqrt(2),sqrt(5)])
+tICopr = GetCopr(tI, extension=[sp.sqrt(2),sp.sqrt(5)])
 
 print("Obtaining coprime polynomials for tD orbit type...")
-tDCopr = GetCopr(tD, extension=[sqrt(2),sqrt(5)])
+tDCopr = GetCopr(tD, extension=[sp.sqrt(2),sp.sqrt(5)])
 
 print("Obtaining coprime polynomials for rD orbit type...")
-rDCopr = GetCopr(rD, extension=[sqrt(2),sqrt(5)])
+rDCopr = GetCopr(rD, extension=[sp.sqrt(2),sp.sqrt(5)])
 
 coprTime = time.time()
 print("Total coprime polynomial time: %s seconds." % (coprTime - startTime))
@@ -59,7 +62,7 @@ rDCandidatesStar532 = Get1DOrbitCandidates(rD, rDCopr, groups.rDGroupStar532)
 rDCandidates532 = Get1DOrbitCandidates(rD, rDCopr, groups.rDGroup532)
 
 candTime = time.time()
-print("Total candidate time: %s seconds." % (candtTime - confTime))
+print("Total candidate time: %s seconds." % (candTime - coprTime))
 
 #Obtaining realizations
 print("Obtaining realizations for small orbit types (tT,rT,rP,tO,tC,rC)...")
@@ -95,5 +98,5 @@ Export1DOrbitTypeFacetings(rD, rDCandidatesStar432, groups.rDGroupStar532, "3dmo
 Export1DOrbitTypeFacetings(rD, rDCandidates432, groups.rDGroup532, "3dmodels", "rD532")
 
 enumTime = time.time()
-print("Total realization time: %s seconds." % (enumTime - rootTime))
+print("Total realization time: %s seconds." % (enumTime - candTime))
 print("Total execution time: %s seconds." % (enumTime - startTime))
