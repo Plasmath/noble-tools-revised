@@ -1,5 +1,6 @@
 from faceting import Generate, FacetAll
 from plot import MakePlot
+from sympy import real_roots
 
 summary = open("3dmodels/summary.txt","w")
 
@@ -7,8 +8,7 @@ summary.write(
 """NOTE: These polynomials are not simplified. In almost all cases,
 there is a simpler factor of the given polynomial that gives the same root.
 
-"""
-)
+""")
 
 summary.close()
 
@@ -36,6 +36,13 @@ def ExportToOFF(vertices, face, group, directory, name):
         file.write(str(len(f))+" "+" ".join(str(i) for i in f)+"\n")
     
     #MakePlot(vertices, face, group, name)
+        
+def WriteSummary(name, polynomial):
+    summary = open("3dmodels/summary.txt","a")
+    
+    summary.write("The parameter of the "+name+" orbit is a positive root of the following polynomial: "+str(polynomial)+"\n")
+    
+    summary.close()
 
 def ExportAllFacetings(vertices, group, directory, name, ignoreTriangles = False, poly = None):
     facetings = FacetAll(vertices, group, ignoreTriangles)
@@ -44,8 +51,5 @@ def ExportAllFacetings(vertices, group, directory, name, ignoreTriangles = False
         ExportToOFF(vertices, facetings[i], group, directory, name+"."+str(i))
         
     if len(facetings) > 0:
-        summary = open("3dmodels/summary.txt","a")
+        WriteSummary(name,poly)
         
-        summary.write("The parameter of the "+name+" orbit is a positive root of the following polynomial: "+str(poly)+"\n")
-        
-        summary.close()

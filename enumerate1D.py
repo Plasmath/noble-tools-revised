@@ -1,4 +1,4 @@
-from symbolic import *
+from symbolic1D import *
 import groups
 import time
 
@@ -14,77 +14,86 @@ tCCopr = GetCopr(tC)
 rCCopr = GetCopr(rC)
 
 print("Obtaining coprime polynomials for tI orbit type...")
-tIConf = GetCopr(tI, extension=[sqrt(2),sqrt(5)])
+tICopr = GetCopr(tI, extension=[sqrt(2),sqrt(5)])
 
 print("Obtaining coprime polynomials for tD orbit type...")
-tDConf = GetCopr(tD, extension=[sqrt(2),sqrt(5)])
+tDCopr = GetCopr(tD, extension=[sqrt(2),sqrt(5)])
 
 print("Obtaining coprime polynomials for rD orbit type...")
-rDConf = GetCopr(rD, extension=[sqrt(2),sqrt(5)])
+rDCopr = GetCopr(rD, extension=[sqrt(2),sqrt(5)])
 
-confTime = time.time()
-print("Total coprime polynomial time: %s seconds." % (confTime - startTime))
+coprTime = time.time()
+print("Total coprime polynomial time: %s seconds." % (coprTime - startTime))
 
-"""
-#Obtaining roots of entries within said volume configurations.
-print("Obtaining parameter roots for small orbit types (tT,rT,rP,tO,tC,rC)...")
-tTroots = Get1DOrbitRoots(tTConf, a)
-rTroots = Get1DOrbitRoots(rTConf, a)
-rProots = Get1DOrbitRoots(rPConf, a)
-tOroots = Get1DOrbitRoots(tOConf, a)
-tCroots = Get1DOrbitRoots(tCConf, a)
-rCroots = Get1DOrbitRoots(rCConf, a)
+#Obtaining orbit candidates
+print("Obtaining orbit candidates for small orbit types (tT,rT,rP,tO,tC,rC)...")
+tTCandidatesStar332 = Get1DOrbitCandidates(tT, tTCopr, groups.tTGroupStar332)
+tTCandidates332 = Get1DOrbitCandidates(tT, tTCopr, groups.tTGroup332)
 
-print("Obtaining parameter roots for tI orbit type...")
-tIroots = Get1DOrbitRoots(tIConf, a)
+rTCandidatesStar332 = Get1DOrbitCandidates(rT, rTCopr, groups.rTGroupStar332)
+rTCandidates332 = Get1DOrbitCandidates(rT, rTCopr, groups.rTGroup332)
 
-print("Obtaining parameter roots for tD orbit type...")
-tDroots = Get1DOrbitRoots(tDConf, a)
+rPCandidates3Star2 = Get1DOrbitCandidates(rP, rPCopr, groups.rPGroup3Star2)
 
-print("Obtaining parameter roots for rD orbit type...")
-rDroots = Get1DOrbitRoots(rDConf, a)
+tOCandidatesStar432 = Get1DOrbitCandidates(tO, tOCopr, groups.tOGroupStar432)
+tOCandidates432 = Get1DOrbitCandidates(tO, tOCopr, groups.tOGroup432)
 
-rootTime = time.time()
-print("Total rootfinding time: %s seconds." % (rootTime - confTime))
+tCCandidatesStar432 = Get1DOrbitCandidates(tC, tCCopr, groups.tCGroupStar432)
+tCCandidates432 = Get1DOrbitCandidates(tC, tCCopr, groups.tCGroup432)
+tCCandidates3Star2 = Get1DOrbitCandidates(tC, tCCopr, groups.tCGroup3Star2)
 
-#Enumerating facetings for all orbit types.
-print("Enumerating small orbit types (tT,rT,rP,tO,tC,rC)...")
-#tT orbit type
-Enumerate1DOrbit(tTroots, tT, groups.tTGroup332, a, "3dmodels", "tT332")
-Enumerate1DOrbit(tTroots, tT, groups.tTGroupStar332, a, "3dmodels", "tTStar332")
-#rT orbit type
-Enumerate1DOrbit(rTroots, rT, groups.rTGroup332, a, "3dmodels", "rT332")
-Enumerate1DOrbit(rTroots, rT, groups.rTGroupStar332, a, "3dmodels", "rTStar332")
-#rP orbit type
-Enumerate1DOrbit(rProots, rP, groups.rPGroup3Star2, a, "3dmodels", "rP3Star2")
-#tO orbit type
-Enumerate1DOrbit(tOroots, tO, groups.tOGroup432, a, "3dmodels", "tO432")
-Enumerate1DOrbit(tOroots, tO, groups.tOGroupStar432, a, "3dmodels", "tOStar432")
-#tC orbit type
-Enumerate1DOrbit(tCroots, tC, groups.tCGroup432, a, "3dmodels", "tC432")
-Enumerate1DOrbit(tCroots, tC, groups.tCGroup3Star2, a, "3dmodels", "tC3Star2")
-Enumerate1DOrbit(tCroots, tC, groups.tCGroupStar432, a, "3dmodels", "tCStar432")
-#rC orbit type
-Enumerate1DOrbit(rCroots, rC, groups.rCGroup432, a, "3dmodels", "rC432")
-Enumerate1DOrbit(rCroots, rC, groups.rCGroup3Star2, a, "3dmodels", "rC3Star2")
-Enumerate1DOrbit(rCroots, rC, groups.rCGroupStar432, a, "3dmodels", "rCStar432")
+rCCandidatesStar432 = Get1DOrbitCandidates(rC, rCCopr, groups.rCGroupStar432)
+rCCandidates432 = Get1DOrbitCandidates(rC, rCCopr, groups.rCGroup432)
+rCCandidates3Star2 = Get1DOrbitCandidates(rC, rCCopr, groups.rCGroup3Star2)
 
-print("Enumerating tI orbit type...")
-#tI orbit type
-Enumerate1DOrbit(tIroots, tI, groups.tIGroup532, a, "3dmodels", "tI532")
-Enumerate1DOrbit(tIroots, tI, groups.tIGroupStar532, a, "3dmodels", "tIStar532")
+print("Obtaining orbit candidates for tI orbit type...")
+tICandidatesStar532 = Get1DOrbitCandidates(tI, tICopr, groups.tIGroupStar532)
+tICandidates532 = Get1DOrbitCandidates(tI, tICopr, groups.tIGroup532)
 
-print("Enumerating tD orbit type...")
-#tD orbit type
-Enumerate1DOrbit(tDroots, tD, groups.tDGroup532, a, "3dmodels", "tD532")
-Enumerate1DOrbit(tDroots, tD, groups.tDGroupStar532, a, "3dmodels", "tDStar532")
+print("Obtaining orbit candidates for tD orbit type...")
+tDCandidatesStar532 = Get1DOrbitCandidates(tD, tDCopr, groups.tDGroupStar532)
+tDCandidates532 = Get1DOrbitCandidates(tD, tDCopr, groups.tDGroup532)
 
-print("Enumerating rD orbit type...")
-#tD orbit type
-Enumerate1DOrbit(rDroots, rD, groups.rDGroup532, a, "3dmodels", "rD532")
-Enumerate1DOrbit(rDroots, rD, groups.rDGroupStar532, a, "3dmodels", "rDStar532")
+print("Obtaining orbit candidates for rD orbit type...")
+rDCandidatesStar532 = Get1DOrbitCandidates(rD, rDCopr, groups.rDGroupStar532)
+rDCandidates532 = Get1DOrbitCandidates(rD, rDCopr, groups.rDGroup532)
+
+candTime = time.time()
+print("Total candidate time: %s seconds." % (candtTime - confTime))
+
+#Obtaining realizations
+print("Obtaining realizations for small orbit types (tT,rT,rP,tO,tC,rC)...")
+Export1DOrbitTypeFacetings(tT, tTCandidatesStar332, groups.tTGroupStar332, "3dmodels", "tTStar332")
+Export1DOrbitTypeFacetings(tT, tTCandidates332, groups.tTGroup332, "3dmodels", "tT332")
+
+Export1DOrbitTypeFacetings(rT, rTCandidatesStar332, groups.rTGroupStar332, "3dmodels", "rTStar332")
+Export1DOrbitTypeFacetings(rT, rTCandidates332, groups.rTGroup332, "3dmodels", "rT332")
+
+Export1DOrbitTypeFacetings(rP, rPCandidates3Star2, groups.rPGroup3Star2, "3dmodels", "rP3Star2")
+
+Export1DOrbitTypeFacetings(tO, tOCandidatesStar432, groups.tOGroupStar432, "3dmodels", "tOStar432")
+Export1DOrbitTypeFacetings(tO, tOCandidates432, groups.tOGroup432, "3dmodels", "tO432")
+
+Export1DOrbitTypeFacetings(tC, tCCandidatesStar432, groups.tCGroupStar432, "3dmodels", "tCStar432")
+Export1DOrbitTypeFacetings(tC, tCCandidates432, groups.tCGroup432, "3dmodels", "tC432")
+Export1DOrbitTypeFacetings(tC, tCCandidates3Star2, groups.tCGroup3Star2, "3dmodels", "tC3Star2")
+
+Export1DOrbitTypeFacetings(rC, rCCandidatesStar432, groups.rCGroupStar432, "3dmodels", "rCStar432")
+Export1DOrbitTypeFacetings(rC, rCCandidates432, groups.rCGroup432, "3dmodels", "rC432")
+Export1DOrbitTypeFacetings(rC, rCCandidates3Star2, groups.rCGroup3Star2, "3dmodels", "rC3Star2")
+
+print("Obtaining realizations for tI orbit type...")
+Export1DOrbitTypeFacetings(tI, tICandidatesStar432, groups.tIGroupStar532, "3dmodels", "tIStar532")
+Export1DOrbitTypeFacetings(tI, tICandidates432, groups.tIGroup532, "3dmodels", "tI532")
+
+print("Obtaining realizations for tD orbit type...")
+Export1DOrbitTypeFacetings(tD, tDCandidatesStar432, groups.tDGroupStar532, "3dmodels", "tDStar532")
+Export1DOrbitTypeFacetings(tD, tDCandidates432, groups.tDGroup532, "3dmodels", "tD532")
+
+print("Obtaining realizations for rD orbit type...")
+Export1DOrbitTypeFacetings(rD, rDCandidatesStar432, groups.rDGroupStar532, "3dmodels", "rDStar532")
+Export1DOrbitTypeFacetings(rD, rDCandidates432, groups.rDGroup532, "3dmodels", "rD532")
 
 enumTime = time.time()
-print("Total enumeration time: %s seconds." % (enumTime - rootTime))
+print("Total realization time: %s seconds." % (enumTime - rootTime))
 print("Total execution time: %s seconds." % (enumTime - startTime))
-"""
