@@ -102,6 +102,8 @@ def GetPlane(ind1,ind2,ind3,orbit):
     return [i for i in range(len(orbit)) if abs((orbit[i]-p1).dot(c)) < prec]
 
 def FacetAll(orbit, group, ignoreTriangles = False): #Find all facetings of an orbit in all possible planes
+    orbitSize = len(orbit)    
+
     if ignoreTriangles:
         minCycleLength = 4
     else:

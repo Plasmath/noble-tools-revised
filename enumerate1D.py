@@ -1,5 +1,4 @@
 print("Starting!")
-print("Note: Estimated runtime required to complete enumeration is approximately 30 minutes.")
 
 from symbolic1D import *
 import groups
@@ -86,16 +85,16 @@ Export1DOrbitTypeFacetings(rC, rCCandidates432, groups.rCGroup432, "3dmodels", "
 Export1DOrbitTypeFacetings(rC, rCCandidates3Star2, groups.rCGroup3Star2, "3dmodels", "rC3Star2")
 
 print("Obtaining realizations for tI orbit type...")
-Export1DOrbitTypeFacetings(tI, tICandidatesStar432, groups.tIGroupStar532, "3dmodels", "tIStar532")
-Export1DOrbitTypeFacetings(tI, tICandidates432, groups.tIGroup532, "3dmodels", "tI532")
+Export1DOrbitTypeFacetings(tI, tICandidatesStar532, groups.tIGroupStar532, "3dmodels", "tIStar532")
+Export1DOrbitTypeFacetings(tI, tICandidates532, groups.tIGroup532, "3dmodels", "tI532")
 
 print("Obtaining realizations for tD orbit type...")
-Export1DOrbitTypeFacetings(tD, tDCandidatesStar432, groups.tDGroupStar532, "3dmodels", "tDStar532")
-Export1DOrbitTypeFacetings(tD, tDCandidates432, groups.tDGroup532, "3dmodels", "tD532")
+Export1DOrbitTypeFacetings(tD, tDCandidatesStar532, groups.tDGroupStar532, "3dmodels", "tDStar532")
+Export1DOrbitTypeFacetings(tD, tDCandidates532, groups.tDGroup532, "3dmodels", "tD532")
 
 print("Obtaining realizations for rD orbit type...")
-Export1DOrbitTypeFacetings(rD, rDCandidatesStar432, groups.rDGroupStar532, "3dmodels", "rDStar532")
-Export1DOrbitTypeFacetings(rD, rDCandidates432, groups.rDGroup532, "3dmodels", "rD532")
+Export1DOrbitTypeFacetings(rD, rDCandidatesStar532, groups.rDGroupStar532, "3dmodels", "rDStar532")
+Export1DOrbitTypeFacetings(rD, rDCandidates532, groups.rDGroup532, "3dmodels", "rD532")
 
 enumTime = time.time()
 print("Total realization time: %s seconds." % (enumTime - candTime))

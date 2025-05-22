@@ -5,8 +5,8 @@ from sympy import real_roots
 summary = open("3dmodels/summary.txt","w")
 
 summary.write(
-"""NOTE: These polynomials are not simplified. In almost all cases,
-there is a simpler factor of the given polynomial that gives the same root.
+"""NOTE: These polynomials are not simplified. In some cases,
+there may be a simpler factor of the given polynomial that gives the same root.
 
 """)
 

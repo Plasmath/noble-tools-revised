@@ -39,12 +39,18 @@ def Copr(Conf, numVerts, extension = []):
     #Initial factoring attempt
     initialFactorsDict = dict()
     
+    sharedPlanes = set() #Planes shared by all members of the orbit type.
+    
     for c in Conf.keys():
+        if c == 0:
+            sharedPlanes = sharedPlanes.union(set(Conf[c]))
         
         factors = [f[0] for f in sp.factor_list(c)[1]]
         
         for f in factors:
             initialFactorsDict[f] = initialFactorsDict.setdefault(f,set()).union(set(Conf[c]))
+    
+    sharedPlanes = MergePlanes(sharedPlanes)
     
     keys = list(initialFactorsDict.keys())
     for c in keys:
@@ -69,7 +75,7 @@ def Copr(Conf, numVerts, extension = []):
         if all(i >= 0 for i in sp.Poly(s,a).all_coeffs()):
             continue
         
-        currentDictValue = coprimeFactorsDict.setdefault(s, [])
+        currentDictValue = coprimeFactorsDict.setdefault(s, sharedPlanes)
         coprimeFactorsDict[s] = MergePlanes(newPlanes+currentDictValue)
     
     #Final check to make sure that no pair of polynomials shares a common factor.
@@ -135,15 +141,16 @@ def Export1DOrbitTypeFacetings(orbitType, typeCandidates, group, directory, name
         polynomial = polyCandidates[0]
         faces = polyCandidates[1]
         
-        roots = [i.evalf() for i in sp.real_roots(polynomial)]
+        roots = [i.evalf() for i in sp.real_roots(polynomial.evalf())]
         for root in roots:
             if root <= 0:
                 continue
             
             vertices = DeepEval1D(orbitType, root)
             
-            for face in faces:
+            for i in range(len(faces)):
+                face = faces[i]
                 print("Exporting faceting",face,"of",name,"at",root)
             
-                ExportToOFF(vertices, face, group, directory, name+"."+str(root))
+                ExportToOFF(vertices, face, group, directory, name+"."+str(root)+"."+str(i))
                 WriteSummary(name+"."+str(root), polynomial)
