@@ -1,3 +1,5 @@
+print("Starting!")
+
 import groups
 from export import ExportAllFacetings
 

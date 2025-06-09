@@ -1,0 +1,1 @@
+Extra data is stored here when the output of one program is used as the input of another.

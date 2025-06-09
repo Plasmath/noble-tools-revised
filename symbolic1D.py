@@ -1,39 +1,7 @@
 from symbolic import *
 from faceting import FindFacetings, Generate
 import sympy as sp
-import groups
 from export import ExportToOFF, WriteSummary
-
-#Obtain the set S_f for a given polynomial f as described in Theorem 3.21.
-#This is a recursive function, and we make a minor efficiency improvement
-#where if we calculate the greatest common divisor of f with a polynomial
-#it is not necessary to calculate that same divisor with one of the recursive
-#factors of f.
-def GetCoprimeSet(factorDict, f, planes, extension, startingIndex = 0):
-    
-    for i in range(startingIndex,len(factorDict)):
-        g = list(factorDict.keys())[i]
-        res = sp.resultant(f,g)
-        
-        if res == 0 and f != g: #Shared common factor
-            gcd = sp.gcd(f,g,extension=extension)
-            gcdPlanes = MergePlanes(planes+factorDict[g])
-            
-            if f == gcd: #f is a factor of g
-                continue
-            
-            if gcd.is_constant(): #The greatest common divisor was not calculated under a large enough field extension, so something went wrong
-                raise Exception("Error: constant GCD encountered. The following polynomials were involved: "+str(f)+", "+str(g))
-            
-            h = sp.quo(f,gcd) #Computes polynomial quotient between f and gcd: the polynomial h such that f = gcd*h + r when using Euclidean division.
-            #As we know already that gcd is a factor of f, r must be zero and this is the same as f/gcd.
-            
-            coprimeSetGCD = GetCoprimeSet(factorDict, gcd, gcdPlanes, extension, startingIndex=i)
-            coprimeSetH   = GetCoprimeSet(factorDict,   h,    planes, extension, startingIndex=i)
-            
-            return coprimeSetGCD + coprimeSetH #Disjoint union S_gcd(f,g) U S_h
-    
-    return [(f,planes)]
 
 def Copr(Conf, numVerts, extension = []):
     #Initial factoring attempt
