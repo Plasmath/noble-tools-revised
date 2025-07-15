@@ -1,3 +1,6 @@
+#config.py
+#Base file that holds a few useful shared values.
+
 from sympy import Symbol
 
 #Indicates whether to use symbolic notation or numeric approximations for vertices and reflection matrices

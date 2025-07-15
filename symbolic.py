@@ -1,20 +1,17 @@
+#symbolic.py
 #Code that constructs the symbolic forms of the orbit types.
 #This is only needed for the orbit types with one or more degrees of freedom
 #in order to obtain exact minimal polynomials for their parameters.
-import vertices
 import config
 import sympy as sp
-import groups
+import groups #contains vertices.py
 from numpy.polynomial import Polynomial
-from numpy import array,sqrt,real,imag
-from export import ExportAllFacetings
-from faceting import FindFacetings
 
-config.useSymbolic = True
+config.useSymbolic = True #Use symbolic mode
+groups.InitializeConstants()
 
-vertices.InitializeSymbolic()
-
-def GetRoots(poly, var): #Obtains all positive real roots of a polynomial
+#Obtains all positive real roots of a polynomial.
+def GetRoots(poly, var):
     if poly.is_constant():
         return []
     
@@ -32,30 +29,30 @@ a = config.a
 b = config.b
 
 #Orbit types with 1 degree of freedom.
-tT = vertices.GenerateVStar332(0, a, 1)
-rT = vertices.GenerateVStar332(a, 1, 0)
-rP = vertices.GenerateV3Star2 (0, a, 1)
-tO = vertices.GenerateVStar432(0, a, 1)
-tC = vertices.GenerateVStar432(a, 1, 0)
-rC = vertices.GenerateVStar432(a, 0, 1)
-tI = vertices.GenerateVStar532(0, a, 1)
-tD = vertices.GenerateVStar532(a, 0, 1)
-rD = vertices.GenerateVStar532(a, 1, 0)
+tT = groups.GenerateVStar332(0, a, 1)
+rT = groups.GenerateVStar332(a, 1, 0)
+rP = groups.GenerateV3Star2 (0, a, 1)
+tO = groups.GenerateVStar432(0, a, 1)
+tC = groups.GenerateVStar432(a, 1, 0)
+rC = groups.GenerateVStar432(a, 0, 1)
+tI = groups.GenerateVStar532(0, a, 1)
+tD = groups.GenerateVStar532(a, 0, 1)
+rD = groups.GenerateVStar532(a, 1, 0)
 
 #Orbit types with 2 degrees of freedom.
-sT = vertices.GenerateV332(a, b, 1)
-gT = vertices.GenerateVStar332(a, b, 1)
-gP = vertices.GenerateV3Star2(a, b, 1)
-sC = vertices.GenerateV432(a, b, 1)
-gC = vertices.GenerateVStar432(a, b, 1)
-sD = vertices.GenerateV532(a, b, 1)
-gD = vertices.GenerateVStar532(a, b, 1)
+sT = groups.GenerateV332(a, b, 1)
+gT = groups.GenerateVStar332(a, b, 1)
+gP = groups.GenerateV3Star2(a, b, 1)
+sC = groups.GenerateV432(a, b, 1)
+gC = groups.GenerateVStar432(a, b, 1)
+sD = groups.GenerateV532(a, b, 1)
+gD = groups.GenerateVStar532(a, b, 1)
 
 #This expression is the determinant of
 #[ p[0] p[1] p[2] 1 ]
 #[ q[0] q[1] q[2] 1 ]
 #[ r[0] r[1] r[2] 1 ]
-#[ s[0] s[1] s[2] 1 ].
+#[ s[0] s[1] s[2] 1 ], 
 def ConfigurationEntry(p,q,r,s):
     expr = (-p[2]*q[1]*r[0] + p[1]*q[2]*r[0] + p[2]*q[0]*r[1] - p[0]*q[2]*r[1] -
              p[1]*q[0]*r[2] + p[0]*q[1]*r[2] + p[2]*q[1]*s[0] - p[1]*q[2]*s[0] - 
@@ -65,6 +62,7 @@ def ConfigurationEntry(p,q,r,s):
              q[2]*r[1]*s[0] - q[1]*r[2]*s[0] + q[0]*r[2]*s[1] - q[0]*r[1]*s[2])
     return sp.expand(expr)
 
+#Obtain the volume configuration of an orbit type, with identical polynomials grouped together.
 def VolumeConfiguration(orbitType):
     Conf = dict()
     for i in range(1,len(orbitType)):
@@ -74,13 +72,15 @@ def VolumeConfiguration(orbitType):
                 Conf[entry] = Conf.setdefault(entry,[])+[(i,j,k)]
     return Conf
 
+#Given a set of planes of coplanar vertices, group together planes which must be coplanar
+#with each other. Each plane is assumed to have the vertex with index 0 as noble polyhedra
+#are vertex-transitive.
 def MergePlanes(planes):
     plns = [set(t) for t in sorted(tuple(i) for i in planes)]
     
     mergedPlanes = []
     for p in plns:
         mergedPlanes.append(p)
-        
         planesToDelete = set()
         for i in range(len(mergedPlanes)):
             for j in range(i+1,len(mergedPlanes)):
@@ -99,7 +99,6 @@ def MergePlanes(planes):
 #it is not necessary to calculate that same divisor with one of the recursive
 #factors of f.
 def GetCoprimeSet(factorDict, f, planes, extension, startingIndex = 0):
-    
     for i in range(startingIndex,len(factorDict)):
         g = list(factorDict.keys())[i]
         res = sp.resultant(f,g)

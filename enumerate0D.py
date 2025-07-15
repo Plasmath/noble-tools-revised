@@ -1,7 +1,16 @@
+#enumerate0D.py
+#Facets all orbit types with 0 degrees of freedom and exports
+#their facetings as OFF files. This will contain some duplicates
+#as some facetings are noble under multiple symmetries.
+
 print("Starting!")
 
 import groups
+import time
 from export import ExportAllFacetings
+
+startTime = time.time()
+print("Faceting orbits...")
 
 T = groups.Tbase
 O = groups.Obase
@@ -44,3 +53,6 @@ ExportAllFacetings(D, groups.DGroup532, "3dmodels", "D532")
 #ID orbit type
 ExportAllFacetings(ID, groups.IDGroupStar532, "3dmodels", "IDStar532")
 ExportAllFacetings(ID, groups.IDGroup532, "3dmodels", "ID532")
+
+print("Finished.")
+print("Total time taken:",time.time()-startTime)

@@ -1,8 +1,13 @@
+#symbolic1D.py
+#Code specific to the enumeration of orbit types with 1 degree of freedom. 
+
 from symbolic import *
 from faceting import FindFacetings, Generate
-import sympy as sp
 from export import ExportToOFF, WriteSummary
 
+#Obtain coprime polynomials and planes of an orbit type with 1 degree of freedom,
+#given the volume configruation. In all cases factorization under a field extension
+#is required, which is included here.
 def Copr(Conf, numVerts, extension = []):
     #Initial factoring attempt
     initialFactorsDict = dict()
@@ -54,11 +59,13 @@ def Copr(Conf, numVerts, extension = []):
     
     return list(coprimeFactorsDict.items())
 
+#Slightly more streamlined and convenient version of the Copr function.
 def GetCopr(orbitType, extension = [sp.sqrt(2)]):
     Conf = VolumeConfiguration(orbitType)
     return Copr(Conf, len(orbitType), extension = extension)
 
-def EquivalentFaces(face, group): #Finds the set of faces containing the 0 (initial) vertex and equivalent to the given face.
+#Finds the set of faces containing the 0 (initial) vertex and equivalent to the given face.
+def EquivalentFaces(face, group):
     faces = [f for f in Generate(face,group) if 0 in f]
     permutedFaces = [] #We want the first vertex of our face to be the initial vertex
     for f in faces:
@@ -69,6 +76,8 @@ def EquivalentFaces(face, group): #Finds the set of faces containing the 0 (init
         permutedFaces.append([0]+list(reversed(g)))
     return permutedFaces
 
+#Abstractly facets coprime polynomials to check for possible noble facetings.
+#From there, it may be checked whether such a faceting can actually be realized.
 def Get1DOrbitCandidates(orbitType, copr, group):
     totalFacetings = []
     

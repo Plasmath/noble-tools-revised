@@ -1,17 +1,11 @@
+#export.py
+#Code that handles the exporting of noble polyhedra into different files
+#such as .off files for noble polyhedra and summary files containing
+#other useful data.
+
 from faceting import Generate, FacetAll
-from plot import MakePlot
-from sympy import real_roots
 
-summary = open("3dmodels/summary.txt","w")
-
-summary.write(
-"""NOTE: These polynomials are not simplified. In some cases,
-there may be a simpler factor of the given polynomial that gives the same root.
-
-""")
-
-summary.close()
-
+#Export a noble polyhedron as an OFF file.
 def ExportToOFF(vertices, face, group, directory, name):
     #faces with symmetry will have duplicates under Generate.
     #This filters those extra faces out.
@@ -34,9 +28,8 @@ def ExportToOFF(vertices, face, group, directory, name):
     
     for f in faces:
         file.write(str(len(f))+" "+" ".join(str(i) for i in f)+"\n")
-    
-    #MakePlot(vertices, face, group, name)
-        
+
+#Add a line to the summary.txt file for the given noble polyhedron.
 def WriteSummary(name, polynomial):
     summary = open("3dmodels/summary.txt","a")
     
@@ -44,6 +37,7 @@ def WriteSummary(name, polynomial):
     
     summary.close()
 
+#Export all facetings of a given orbit.
 def ExportAllFacetings(vertices, group, directory, name, ignoreTriangles = False, poly = None):
     facetings = FacetAll(vertices, group, ignoreTriangles)
     for i in range(len(facetings)):

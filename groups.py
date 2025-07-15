@@ -4,7 +4,6 @@
 #Reference Table 1 for more details on which orbit types are acted transitively on by which point groups.
 
 from vertices import *
-import numpy as np
 
 def GetIndexOfImage(base,p,mat): #Get the index of mat*p in the list of points in the given base orbit.
     image = RoundArray(mat.dot(p))
@@ -19,7 +18,6 @@ def Compose(perm1,perm2): #Compose two permutations to get a new permutation.
     return tuple(perm1[perm2[i]] for i in range(len(perm2)))
 
 def GeneratePermutationGroup(base, generators, N): #Generate the permutation group for a given orbit type.
-    
     perm1 = GetPermutation(base, generators[0])
     perm2 = GetPermutation(base, generators[1])
     perm3 = GetPermutation(base, generators[2])
