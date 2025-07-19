@@ -72,6 +72,20 @@ def VolumeConfiguration(orbitType):
                 Conf[entry] = Conf.setdefault(entry,[])+[(i,j,k)]
     return Conf
 
+#Export the volume configuration of a given orbit type in a format easier to process with Mathematica.
+def ExportConf(Conf, name, dim = 1):
+    f = open("data/conf"+str(dim)+"d.txt","a")
+    f.write(name+" : "+repr(Conf))
+    f.write("\n")
+    f.close()
+    
+    g = open("data/"+name+"ConfPoly.txt","w")
+    for poly in Conf.keys():
+        polyStr = str(poly).replace("**","^").replace("sqrt(","Sqrt[").replace(")","]").replace(" ","")
+        g.write(polyStr)
+        g.write("\n")
+    g.close()
+
 #Given a set of planes of coplanar vertices, group together planes which must be coplanar
 #with each other. Each plane is assumed to have the vertex with index 0 as noble polyhedra
 #are vertex-transitive.

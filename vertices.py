@@ -8,6 +8,7 @@ import config
 #Variables currently unassigned; will be assigned later depending on whether symbolic mode is on or not
 phi = None
 root2 = None
+half = None
 
 r1tet = None; r2tet = None; r3tet = None
 r1oct = None; r2oct = None; r3oct = None
@@ -19,7 +20,7 @@ v1ico = None; v2ico = None; v3ico = None
 
 #Initialize constants for symbolic/numeric mode.
 def InitializeConstants():
-    global phi; global root2
+    global phi; global root2; global half
     
     global r1tet; global r2tet; global r3tet
     global r1oct; global r2oct; global r3oct
@@ -31,10 +32,12 @@ def InitializeConstants():
     
     if config.useSymbolic: #Symbolic mode
         phi = ( 1 + sp.sqrt(5) ) / 2 #Golden ratio.
-        root2 = sp.sqrt(2)
+        root2 = sp.sqrt(2) #Square root of 2.
+        half = sp.Rational(1,2) #One half (sympy interprets this differently when considered a float value).
     else: #Numeric mode
         phi = ( 1 + np.sqrt(5) ) / 2
         root2 = np.sqrt(2)
+        half = 0.5
     
     #Generating reflection matrices for the *332 reflection group
     r1tet = np.array([[ 0, 1, 0],
@@ -59,9 +62,9 @@ def InitializeConstants():
     r2ico = np.array([[ 1, 0, 0],
                       [ 0,-1, 0],
                       [ 0, 0, 1]])
-    r3ico = 1/2 * np.array([[1-phi,  -phi,     1],
-                            [ -phi,     1, phi-1],
-                            [    1, phi-1,   phi]])
+    r3ico = half * np.array([[1-phi,  -phi,     1],
+                             [ -phi,     1, phi-1],
+                             [    1, phi-1,   phi]])
     
     #Basis vectors for *332 reflection group
     v1tet = np.array([-root2/2, root2/2, root2/2])
@@ -110,6 +113,7 @@ def GenerateFromGroup(initial,r1,r2,r3,N):
             if IsNew(p1,pts): pts.append(p1)
             if IsNew(p2,pts): pts.append(p2)
             if IsNew(p3,pts): pts.append(p3)
+    
     return pts
 
 def GenerateVStar332(a,b,c): #Generate orbit of V_*332 with parameters a,b,c.

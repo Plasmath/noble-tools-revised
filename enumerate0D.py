@@ -55,4 +55,4 @@ ExportAllFacetings(ID, groups.IDGroupStar532, "3dmodels", "IDStar532")
 ExportAllFacetings(ID, groups.IDGroup532, "3dmodels", "ID532")
 
 print("Finished.")
-print("Total time taken:",time.time()-startTime)
+print("Total time taken:",time.time()-startTime,"seconds.")

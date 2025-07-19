@@ -11,7 +11,7 @@ startTime = time.time()
 
 #Reprocessing stored volume configurations
 print("Importing volume configurations...")
-confFile = open("data/conf.txt","r").read().split("\n")
+confFile = open("data/conf2d.txt","r").read().split("\n")
 
 sTConf = eval(confFile[0][5:])
 gTConf = eval(confFile[1][5:])

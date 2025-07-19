@@ -99,19 +99,6 @@ def Copr(Conf, numVerts, extension = []):
 
 def GetCopr(orbitType, Conf, extension = [sp.sqrt(2)]):
     return Copr(Conf, len(orbitType), extension = extension)
-
-def ExportConf(Conf, name):
-    f = open("data/conf.txt","a")
-    f.write(name+" : "+repr(Conf))
-    f.write("\n")
-    f.close()
-    
-    g = open("data/"+name+"ConfPoly.txt","w")
-    for poly in Conf.keys():
-        polyStr = str(poly).replace("**","^").replace("sqrt(","Sqrt[").replace(")","]").replace(" ","")
-        g.write(polyStr)
-        g.write("\n")
-    g.close()
     
 def ImportCoprData(name, Conf):
     factorsFile = open("data/"+name+"ConfFactors.txt")
