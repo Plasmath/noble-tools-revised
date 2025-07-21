@@ -1,4 +1,6 @@
+#enumerate2D-B.py
 #Find all critical pairs within coprime polynomials.
+#WIP
 
 from symbolic2D import ImportCopr, FindCriticalPairs
 import time

@@ -1,6 +1,7 @@
 #symbolic1D.py
 #Code specific to the enumeration of orbit types with 1 degree of freedom. 
 
+from sympy import sqrt
 from symbolic import *
 from faceting import FindFacetings, Generate
 from export import ExportToOFF, WriteSummary
@@ -83,12 +84,12 @@ def Get1DOrbitCandidates(orbitType, copr, group):
     
     for s in copr:
         facetings = []
-        planes = s[1]
+        planes = copr[s]
         for p in planes:
             facetings += FindFacetings(len(orbitType), group, [0]+list(p), minCycleLength=4)
         
         if len(facetings) > 0:
-            totalFacetings.append((s[0],facetings))
+            totalFacetings.append((s,facetings))
     
     #Filter facetings equivalent under symmetry
     totalFacetingsFiltered = []
@@ -108,11 +109,16 @@ def Get1DOrbitCandidates(orbitType, copr, group):
     
     return totalFacetingsFiltered
 
+#Substitutes the values of a constant for the parameter of
+#a given orbit type with 1 degree of freedom.
 def DeepEval1D(orbitType,num):
     return [[p[0].evalf(subs={a:num}),
              p[1].evalf(subs={a:num}),
              p[2].evalf(subs={a:num})] for p in orbitType]
 
+#Given an orbit type and output from Get1DOrbitCandidates,
+#determines the possible noble realizations of these abstract
+#polyhedra and exports them as .off files.
 def Export1DOrbitTypeFacetings(orbitType, typeCandidates, group, directory, name):
     for polyCandidates in typeCandidates:
         polynomial = polyCandidates[0]
@@ -131,3 +137,4 @@ def Export1DOrbitTypeFacetings(orbitType, typeCandidates, group, directory, name
             
                 ExportToOFF(vertices, face, group, directory, name+"."+str(root)+"."+str(i))
                 WriteSummary(name+"."+str(root), polynomial)
+

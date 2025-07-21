@@ -1,5 +1,9 @@
-#Enumerate noble polyhedra in orbit types with 2 degrees of freedom,
-#but not a maximal equivalence class.
+#enumerate2D-A.py
+#Enumerates noble polyhedra in orbit types with 2 degrees of freedom,
+#but not within a maximal equivalence class.
+
+print("Starting!")
+
 from sympy import sqrt
 from config import a,b
 import groups
@@ -10,8 +14,6 @@ from faceting import FacetMinimalEquivalenceClass
 
 startTime = time.time()
 
-print("Starting!")
-
 sTCopr, sTShared = ImportCopr("sT")
 gTCopr, gTShared = ImportCopr("gT")
 gPCopr, gPShared = ImportCopr("gP")
@@ -21,7 +23,7 @@ sDCopr, sDShared = ImportCopr("sD")
 gDCopr, gDShared = ImportCopr("gD")
 
 importTime = time.time()
-print("Import time:",importTime - startTime)
+print("Import time: %s seconds." % (importTime - startTime))
 
 #Check the minimum equivalence classes for facetings
 print("Checking the minimum equivalence classes...")
@@ -43,7 +45,7 @@ else:
     raise Exception("Found unexpected faceting!")
 
 minEquivTime = time.time()
-print("Minimum equivalence class faceting time:",minEquivTime - importTime)
+print("Minimum equivalence class faceting time: %s seconds." % (minEquivTime - importTime))
 
 #Check the other nonmaximal equivalence classes for facetings
 print("Obtaining candidates for other nonmaximal equivalence classes...")
@@ -68,4 +70,4 @@ candidateTime = time.time()
 print("Candidate time:",candidateTime - minEquivTime)
 
 print("Execution successful: no noble polyhedra found in these equivalence classes.")
-print("Total time:", candidateTime - startTime)
+print("Total time: %s seconds." % (candidateTime - startTime))

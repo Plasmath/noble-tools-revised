@@ -14,6 +14,7 @@ from faceting import FacetMinimalEquivalenceClass
 
 startTime = time.time()
 
+#Volume configurations.
 print("Obtaining volume configurations for small orbit types (tT,rT,rP,tO,tC,rC)...")
 tTConf = VolumeConfiguration(tT)
 rTConf = VolumeConfiguration(rT)
@@ -32,7 +33,7 @@ print("Obtaining volume configuration for rD orbit type...")
 rDConf = VolumeConfiguration(rD)
 
 confTime = time.time()
-print("Volume configuration time:",confTime-startTime,"seconds.")
+print("Volume configuration time: %s seconds." % (confTime-startTime))
 
 print("Faceting typical equivalence classes...")
 
@@ -64,7 +65,7 @@ else:
     raise Exception("Found unexpected faceting!")
 
 minTime = time.time()
-print("Typical faceting time:",minTime-confTime,"seconds.")
+print("Typical faceting time: %s seconds." % (minTime-confTime))
 
 print("Exporting volume configurations...")
 ExportConf(tTConf, "tT")
@@ -78,5 +79,5 @@ ExportConf(tDConf, "tD")
 ExportConf(rDConf, "rD")
 exportTime = time.time()
 
-print("Configuration export time:",exportTime-minTime,"seconds.")
-print("Finished. Total time taken:",exportTime-startTime,"seconds.")
+print("Configuration export time: %s seconds." % (exportTime-minTime))
+print("Finished. Total time taken: %s seconds." % (exportTime-startTime))

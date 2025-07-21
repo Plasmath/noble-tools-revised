@@ -107,32 +107,43 @@ def MergePlanes(planes):
     
     return mergedPlanes
 
-#Obtain the set S_f for a given polynomial f as described in Theorem 3.21.
-#This is a recursive function, and we make a minor efficiency improvement
-#where if we calculate the greatest common divisor of f with a polynomial
-#it is not necessary to calculate that same divisor with one of the recursive
-#factors of f.
-def GetCoprimeSet(factorDict, f, planes, extension, startingIndex = 0):
-    for i in range(startingIndex,len(factorDict)):
-        g = list(factorDict.keys())[i]
-        res = sp.resultant(f,g)
-        
-        if res == 0 and f != g: #Shared common factor
-            gcd = sp.gcd(f,g,extension=extension)
-            gcdPlanes = MergePlanes(planes+factorDict[g])
-            
-            if f == gcd: #f is a factor of g
-                continue
-            
-            if gcd.is_constant(): #The greatest common divisor was not calculated under a large enough field extension, so something went wrong
-                raise Exception("Error: constant GCD encountered. The following polynomials were involved: "+str(f)+", "+str(g))
-            
-            h = sp.quo(f,gcd) #Computes polynomial quotient between f and gcd: the polynomial h such that f = gcd*h + r when using Euclidean division.
-            #As we know already that gcd is a factor of f, r must be zero and this is the same as f/gcd.
-            
-            coprimeSetGCD = GetCoprimeSet(factorDict, gcd, gcdPlanes, extension, startingIndex=i)
-            coprimeSetH   = GetCoprimeSet(factorDict,   h,    planes, extension, startingIndex=i)
-            
-            return coprimeSetGCD + coprimeSetH #Disjoint union S_gcd(f,g) U S_h
+#Performs the MergePlanes operation on all planes of a dictionary.
+def MergeAllPlanes(preCopr):
+    Copr = preCopr.copy()
+    for factor in Copr:
+        tris = Copr[factor]
+        Copr[factor] = MergePlanes(tris)
+    return Copr
+
+#Determine if all coefficients of a polynomial are positive.
+def PositiveCoeffs(poly):
+    return all(all(i >= 0 for i in sp.Poly(f,a).all_coeffs()) for f in sp.Poly(poly,b).all_coeffs())
+
+#Given corresponding data files, imports the coprime polynomials of an
+#orbit type with corresponding faceting data.
+def ImportCoprData(name, Conf):
+    factorsFile = open("data/"+name+"ConfFactors.txt")
+    indicesFile = open("data/"+name+"ConfFactorIndices.txt")
     
-    return [(f,planes)]
+    factors = []
+    for i in factorsFile.readlines():
+        line = i.replace("^","**").replace("Sqrt[","sp.sqrt(").replace("]",")").replace("\n","")
+        factors.append(eval(line))
+    
+    factorPairs = [] #Each pair is (index of polynomial within Conf, index of factor within factors)
+    for line in indicesFile.readlines():
+        pair = tuple(int(i) for i in line.split("\t"))
+        factorPairs.append(pair)
+    
+    factorDict = dict()
+    polyList = list(Conf.keys())
+    for i,j in factorPairs:
+        poly = polyList[i]
+        factor = factors[j]
+        
+        if PositiveCoeffs(factor):
+            continue
+        
+        factorDict[factor] = factorDict.setdefault(factor, []) + Conf[poly]
+    
+    return factorDict

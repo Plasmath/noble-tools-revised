@@ -1,105 +1,16 @@
+#symbolic2D.py
+#Code specific to the enumeration of noble polyhedra found within
+#orbit types with 2 degrees of freedom.
+
 from symbolic import *
 from faceting import FindFacetings, Generate
 import sympy as sp
 from export import ExportToOFF, WriteSummary
 import time
 
-def PositiveCoeffs(poly):
-    return all(all(i >= 0 for i in sp.Poly(f,a).all_coeffs()) for f in sp.Poly(poly,b).all_coeffs())
-
-factorDict = dict()
-def GetCoprimeSet(f, planes, extension, startingIndex = 0):
-    global factorDict
-    
-    if PositiveCoeffs(f):
-        return []
-    
-    for i in range(startingIndex,len(factorDict)):
-        g = list(factorDict.keys())[i]
-        res = sp.resultant(f,g)
-        
-        if res == 0 and f != g: #Shared common factor
-            gcd = sp.gcd(f,g,extension=extension)
-            gcdPlanes = MergePlanes(planes+factorDict[g])
-            
-            if f == gcd: #f is a factor of g
-                continue
-            
-            if gcd.is_constant(): #The greatest common divisor was not calculated under a large enough field extension, so something went wrong
-                raise Exception("Error: constant GCD encountered. The following polynomials were involved: "+str(f)+", "+str(g))
-            
-            h = sp.quo(f,gcd) #Computes polynomial quotient between f and gcd: the polynomial h such that f = gcd*h + r when using Euclidean division.
-            #As we know already that gcd is a factor of f, r must be zero and this is the same as f/gcd.
-            
-            coprimeSetGCD = GetCoprimeSet(gcd, gcdPlanes, extension, startingIndex=i)
-            coprimeSetH   = GetCoprimeSet(  h,    planes, extension, startingIndex=i)
-            
-            return coprimeSetGCD + coprimeSetH #Disjoint union S_gcd(f,g) U S_h
-    
-    return [(f,planes)]
-
-def Copr(Conf, numVerts, extension = []):
-    startTime = time.time()
-    
-    #Initial factoring attempt
-    initialFactorsDict = dict()
-    
-    if 0 in Conf:
-        sharedPlanes = [tuple(i) for i in MergePlanes(Conf[0])]#Planes shared by all members of the orbit type.
-    else:
-        sharedPlanes = []
-    
-    for c in Conf.keys():
-        factors = [f[0] for f in sp.factor_list(c)[1]]
-        
-        for f in factors:
-            #Delete factors which have no negative coefficients, as these cannot have positive roots
-            if PositiveCoeffs(f):
-                continue
-            initialFactorsDict[f] = initialFactorsDict.setdefault(f,set()).union(set(Conf[c]))
-    
-    initTime = time.time()
-    print("Factor initialization:",initTime-startTime)
-    
-    keys = list(initialFactorsDict.keys())
-    for c in keys:
-        initialFactorsDict[c] = MergePlanes(initialFactorsDict[c])
-    
-    initialFactors = list(initialFactorsDict.keys())
-    
-    global factorDict
-    factorDict = initialFactorsDict
-    
-    filteredSets = []
-    for i in range(len(initialFactors)):
-        f = initialFactors[i]
-        print(i,"/",len(initialFactors))
-        filteredSets += GetCoprimeSet(f, initialFactorsDict[f], extension)
-    
-    filterTime = time.time()
-    print("Filtering:",filterTime-initTime)
-    
-    #The sets given may have multiple instances of the same polynomial, so we merge the planes of these together.
-    coprimeFactorsDict = dict()
-    
-    for i in range(len(filteredSets)):
-        s = filteredSets[i][0]
-        newPlanes = filteredSets[i][1]
-        
-        #Again, we do not need to consider factors which have no negative coefficients.
-        if PositiveCoeffs(s):
-            continue
-        
-        currentDictValue = coprimeFactorsDict.setdefault(s, sharedPlanes)
-        coprimeFactorsDict[s] = MergePlanes(newPlanes+currentDictValue)
-        
-    print("Total:",time.time()-startTime)
-    
-    return list(coprimeFactorsDict.items())
-
-def GetCopr(orbitType, Conf, extension = [sp.sqrt(2)]):
-    return Copr(Conf, len(orbitType), extension = extension)
-    
+#Given the appropriate data files, imports the coprime polynomials
+#for a given orbit type and collects the necessary information to
+#obtain the relevant faceting data.
 def ImportCoprData(name, Conf):
     factorsFile = open("data/"+name+"ConfFactors.txt")
     indicesFile = open("data/"+name+"ConfFactorIndices.txt")
@@ -127,13 +38,7 @@ def ImportCoprData(name, Conf):
     
     return factorDict
 
-def MergeAllPlanes(preCopr):
-    Copr = preCopr.copy()
-    for factor in Copr:
-        tris = Copr[factor]
-        Copr[factor] = MergePlanes(tris)
-    return Copr
-
+#Exports the coprime polynomials and faceting data for a given orbit type.
 def ExportCopr(name, copr, sharedPlanes):
     f = open("data/"+name+"Copr.txt", "w")
     f.write(repr(copr))
@@ -141,6 +46,9 @@ def ExportCopr(name, copr, sharedPlanes):
     f.write(repr(sharedPlanes))
     f.close()
 
+#Merges two sets of planes together, with the condition that the
+#a plane from the second set is only added to the final list if
+#it will merge with a plane from the first set.
 def SelectiveMergePlanes(mainPlanes, sharedPlanes):
     totalPlanes = mainPlanes.copy()
     for s in sharedPlanes:
@@ -148,6 +56,8 @@ def SelectiveMergePlanes(mainPlanes, sharedPlanes):
             totalPlanes.append(s)
     return MergePlanes(totalPlanes)
 
+#Test a given set of planes for abstract noble facetings under
+#a given symmetry group.
 def Get2DCoprCandidates(orbitType, copr, sharedPlanes, group,):
     orbitSize = len(orbitType)
     totalFacetingCandidates = []
@@ -167,12 +77,17 @@ def Get2DCoprCandidates(orbitType, copr, sharedPlanes, group,):
 
 ImportCopr = lambda name : [eval(i) for i in open("data/"+name+"Copr.txt").readlines()]
 
+#Determines if two sets of planes contain two planes that would
+#merge to form a larger plane.
 def RequiresMerge(sPlanes,tPlanes):
     for p1 in sPlanes:
         if any((len(p2 & p1) > 1 and p2 != p1) for p2 in tPlanes):
             return True
     return False
 
+#Finds all pairs of coprime polynomials within an orbit type
+#such that the critical planes of these polynomials will merge
+#to form larger planes at their intersections.
 def FindCriticalPairs(copr, sharedPlanes):
     factors = list(copr.keys())
     criticalPairs = []

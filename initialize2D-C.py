@@ -1,3 +1,10 @@
+#initialize2D-C.py
+#The last of a group of three files which obtain the coprime polynomials
+#for the orbit types with 2 degrees of freedom, given the data from
+#initialize2D-B.wls.
+
+print("Starting!")
+
 import sympy as sp
 from sympy import sqrt
 from symbolic2D import ImportCoprData, MergePlanes, MergeAllPlanes, ExportCopr
@@ -22,7 +29,7 @@ sDConf = eval(confFile[5][5:])
 gDConf = eval(confFile[6][5:])
 
 importTimeA = time.time()
-print("Volume configuration import time:",importTimeA - startTime)
+print("Volume configuration import time: %s seconds." % (importTimeA - startTime))
 
 #Importing ConfFactors and ConfFactorIndices files
 print("Importing coprime polynomials...")
@@ -36,7 +43,7 @@ sDFactorData = ImportCoprData("sD", sDConf)
 gDFactorData = ImportCoprData("gD", gDConf)
 
 importTimeB = time.time()
-print("Volume configuration import time:",importTimeB - importTimeA)
+print("Coprime polynomial import time: %s seconds." % (importTimeB - importTimeA))
 
 #Final plane merging and export
 print("Finalizing coprime polynomials...")
@@ -50,7 +57,7 @@ sDCopr = MergeAllPlanes(sDFactorData)
 gDCopr = MergeAllPlanes(gDFactorData)
 
 finalizationTime = time.time()
-print("Coprime finalization time:", finalizationTime - importTimeB)
+print("Coprime finalization time: %s seconds." % (finalizationTime - importTimeB))
 
 print("Exporting...")
 ExportCopr("sT",sTCopr, []) #sT has no planes with more than 3 vertices in the minimum equivalence class, so there are no shared planes.
@@ -62,4 +69,4 @@ ExportCopr("sD", sDCopr, MergePlanes(sDConf[0]))
 ExportCopr("gD", gDCopr, MergePlanes(gDConf[0]))
 
 endTime = time.time()
-print("Total time:", endTime - startTime)
+print("Total time: %s seconds." % (endTime - startTime))

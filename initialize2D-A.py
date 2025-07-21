@@ -1,3 +1,7 @@
+#initialize2D-A.py
+#The first of a group of three files which obtain the coprime polynomials
+#for the orbit types with 2 degrees of freedom.
+
 print("Starting!")
 
 from symbolic2D import *

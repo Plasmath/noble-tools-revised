@@ -1,3 +1,8 @@
+#enumerate1D-C.py
+#Part of the enumeration of noble polyhedra in 1D orbit types. 
+#This file completes the enumeration given the information from
+#enumerate1D-B.wls and enumerate1D-A.py.
+
 print("Starting!")
 
 from symbolic1D import *
@@ -6,26 +11,54 @@ import time
 
 startTime = time.time()
 
-#Volume configurations.
-print("Obtaining coprime polynomials for small orbit types (tT,rT,rP,tO,tC,rC)...")
-tTCopr = GetCopr(tT)
-rTCopr = GetCopr(rT)
-rPCopr = GetCopr(rP)
-tOCopr = GetCopr(tO)
-tCCopr = GetCopr(tC)
-rCCopr = GetCopr(rC)
+#Reprocessing stored volume configurations
+print("Importing volume configurations...")
+confFile = open("data/conf1d.txt","r").read().split("\n")
 
-print("Obtaining coprime polynomials for tI orbit type...")
-tICopr = GetCopr(tI, extension=[sp.sqrt(2),sp.sqrt(5)])
+tTConf = eval(confFile[0][5:])
+rTConf = eval(confFile[1][5:])
+rPConf = eval(confFile[2][5:])
+tOConf = eval(confFile[3][5:])
+tCConf = eval(confFile[4][5:])
+rCConf = eval(confFile[5][5:])
+tIConf = eval(confFile[6][5:])
+tDConf = eval(confFile[7][5:])
+rDConf = eval(confFile[8][5:])
 
-print("Obtaining coprime polynomials for tD orbit type...")
-tDCopr = GetCopr(tD, extension=[sp.sqrt(2),sp.sqrt(5)])
+importTimeA = time.time()
+print("Volume configuration import time: %s seconds." % (importTimeA - startTime))
 
-print("Obtaining coprime polynomials for rD orbit type...")
-rDCopr = GetCopr(rD, extension=[sp.sqrt(2),sp.sqrt(5)])
+#Importing ConfFactors and ConfFactorIndices files
+print("Importing coprime polynomials...")
 
-coprTime = time.time()
-print("Total coprime polynomial time: %s seconds." % (coprTime - startTime))
+tTFactorData = ImportCoprData("tT", tTConf)
+rTFactorData = ImportCoprData("rT", rTConf)
+rPFactorData = ImportCoprData("rP", rPConf)
+tOFactorData = ImportCoprData("tO", tOConf)
+tCFactorData = ImportCoprData("tC", tCConf)
+rCFactorData = ImportCoprData("rC", rCConf)
+tIFactorData = ImportCoprData("tI", tIConf)
+tDFactorData = ImportCoprData("tD", tDConf)
+rDFactorData = ImportCoprData("rD", rDConf)
+
+importTimeB = time.time()
+print("Coprime polynomial import time: %s seconds." % (importTimeB - importTimeA))
+
+#Final plane merging and export
+print("Finalizing coprime polynomials...")
+
+tTCopr = MergeAllPlanes(tTFactorData)
+rTCopr = MergeAllPlanes(rTFactorData)
+rPCopr = MergeAllPlanes(rPFactorData)
+tOCopr = MergeAllPlanes(tOFactorData)
+tCCopr = MergeAllPlanes(tCFactorData)
+rCCopr = MergeAllPlanes(rCFactorData)
+tICopr = MergeAllPlanes(tIFactorData)
+tDCopr = MergeAllPlanes(tDFactorData)
+rDCopr = MergeAllPlanes(rDFactorData)
+
+finalizationTime = time.time()
+print("Coprime finalization time: %s seconds." % (finalizationTime - importTimeB))
 
 #Obtaining orbit candidates
 print("Obtaining orbit candidates for small orbit types (tT,rT,rP,tO,tC,rC)...")
@@ -61,7 +94,7 @@ rDCandidatesStar532 = Get1DOrbitCandidates(rD, rDCopr, groups.rDGroupStar532)
 rDCandidates532 = Get1DOrbitCandidates(rD, rDCopr, groups.rDGroup532)
 
 candTime = time.time()
-print("Total candidate time: %s seconds." % (candTime - coprTime))
+print("Total candidate time: %s seconds." % (candTime - finalizationTime))
 
 #Obtaining realizations
 print("Obtaining realizations for small orbit types (tT,rT,rP,tO,tC,rC)...")
