@@ -15,6 +15,8 @@ The following programs may be run if you want to test the enumeration yourself:
 ** `initialize2D-C.py`
 ** `enumerate2D-A.py`
 
+All files and other relevant data will be placed in the `3dmodels` folder when exported. Noble polyhedra are exported in the .OFF format, and additional data on the minimal polynomials of the locations of the orbits of these noble polyhedra will be exported into a `summary.txt` file.
+
 ## Additional resources
 Additionally, there is a `library` folder containing .OFF files for all noble polyhedra, as well as the data for the minimal polynomials of their locations.
 In the future there are plans to add files allowing the conversion of 3D models to other file formats and the generation of figures.
