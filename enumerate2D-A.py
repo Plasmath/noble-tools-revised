@@ -12,6 +12,8 @@ import symbolic
 from symbolic2D import Get2DCoprCandidates, ImportCopr
 from faceting import FacetMinimalEquivalenceClass
 
+print("Importing...")
+
 startTime = time.time()
 
 sTCopr, sTShared = ImportCopr("sT")

@@ -1,13 +1,14 @@
 #enumerate2D-B.py
 #Find all critical pairs within coprime polynomials.
-#WIP
 
-from symbolic2D import ImportCopr, FindCriticalPairs
+print("Starting!")
+
+from symbolic2D import ImportCopr, MergeAllWithShared, FindCriticalPairs, ExportCriticalPairs
 import time
 
 startTime = time.time()
 
-print("Starting!")
+print("Importing...")
 
 sTCopr, sTShared = ImportCopr("sT")
 gTCopr, gTShared = ImportCopr("gT")
@@ -17,28 +18,39 @@ gCCopr, gCShared = ImportCopr("gC")
 sDCopr, sDShared = ImportCopr("sD")
 gDCopr, gDShared = ImportCopr("gD")
 
+sTCopr = MergeAllWithShared(sTCopr, sTShared)
+gTCopr = MergeAllWithShared(gTCopr, gTShared)
+gPCopr = MergeAllWithShared(gPCopr, gPShared)
+sCCopr = MergeAllWithShared(sCCopr, sCShared)
+gCCopr = MergeAllWithShared(gCCopr, gCShared)
+sDCopr = MergeAllWithShared(sDCopr, sDShared)
+gDCopr = MergeAllWithShared(gDCopr, gDShared)
+
 importTime = time.time()
-print("Import time:",importTime - startTime)
+print("Import time: %s seconds." % (importTime - startTime))
 
-x = lambda pairs, copr : print(len(pairs), len(pairs)*2/(len(copr)*(len(copr)-1)))
+print("Obtaining critical pairs...")
 
-sTPairs = FindCriticalPairs(sTCopr, sTShared)
-x(sTPairs,sTCopr)
+sTPairs = FindCriticalPairs(sTCopr)
+gTPairs = FindCriticalPairs(gTCopr)
+gPPairs = FindCriticalPairs(gPCopr)
+sCPairs = FindCriticalPairs(sCCopr)
+gCPairs = FindCriticalPairs(gCCopr)
+sDPairs = FindCriticalPairs(sDCopr)
+gDPairs = FindCriticalPairs(gDCopr)
 
-gTPairs = FindCriticalPairs(gTCopr, gTShared)
-x(gTPairs,gTCopr)
+pairTime = time.time()
+print("Pair finding time: %s seconds." % (pairTime - importTime))
 
-gPPairs = FindCriticalPairs(gPCopr, gPShared)
-x(gPPairs,gPCopr)
+print("Exporting pairs...")
 
-sCPairs = FindCriticalPairs(sCCopr, sCShared)
-x(sCPairs,sCCopr)
+ExportCriticalPairs("sT",sTPairs,list(sTCopr.keys()))
+ExportCriticalPairs("gT",gTPairs,list(gTCopr.keys()))
+ExportCriticalPairs("gP",gPPairs,list(gPCopr.keys()))
+ExportCriticalPairs("sC",sCPairs,list(sCCopr.keys()))
+ExportCriticalPairs("gC",gCPairs,list(gCCopr.keys()))
+ExportCriticalPairs("sD",sDPairs,list(sDCopr.keys()))
+ExportCriticalPairs("gD",gDPairs,list(gDCopr.keys()))
 
-gCPairs = FindCriticalPairs(gCCopr, gCShared)
-x(gCPairs,gCCopr)
-
-sDPairs = FindCriticalPairs(sDCopr, sDShared)
-x(sDPairs,sDCopr)
-
-gDPairs = FindCriticalPairs(gDCopr, gDShared)
-x(gDPairs,gDCopr)
+exportTime = time.time()
+print("Export time: %s seconds." % (exportTime - pairTime))

@@ -1,0 +1,147 @@
+a
+1 + b
+Sqrt[2]*a + 2*b
+a + Sqrt[2]*b
+Sqrt[2] + 2*a + Sqrt[2]*b
+Sqrt[2] + 2*a + 2*Sqrt[2]*b
+Sqrt[2] + a + Sqrt[2]*b
+2 + Sqrt[2]*a + 2*b
+1 + b + b^2
+2 + 2*Sqrt[2]*a + 4*b + Sqrt[2]*a*b + 2*b^2
+1 + Sqrt[2]*a + b + Sqrt[2]*a*b + b^2
+1 + Sqrt[2]*a + 3*b + b^2
+1 + 2*Sqrt[2]*a + 3*b + Sqrt[2]*a*b + b^2
+2 + 2*Sqrt[2]*a + 2*a^2 + 4*b + 3*Sqrt[2]*a*b + 2*b^2
+1 + b + Sqrt[2]*a*b + b^2
+1 + Sqrt[2]*a + 2*a^2 + b + 2*Sqrt[2]*a*b + b^2
+1 + Sqrt[2]*a + 3*b + Sqrt[2]*a*b + b^2
+1 + 2*Sqrt[2]*a + 2*a^2 + 3*b + 2*Sqrt[2]*a*b + b^2
+1 + Sqrt[2]*a + b - b^2
+-1 - b + Sqrt[2]*a*b + b^2
+1 + 2*Sqrt[2]*a + 2*a^2 + 3*b + 4*Sqrt[2]*a*b + 3*b^2
+1 + Sqrt[2]*a + 2*a^2 + 3*b + 3*Sqrt[2]*a*b + 3*b^2
+-1 - Sqrt[2]*a - b + Sqrt[2]*a*b + b^2
+b
+-(Sqrt[2]*a) + Sqrt[2]*a*b + 2*b^2
+-1 + 2*a^2 - b + 2*Sqrt[2]*a*b + b^2
+1 + 2*Sqrt[2]*a + 2*a^2 + 3*b + 3*Sqrt[2]*a*b + 3*b^2
+1 + Sqrt[2]*a + 3*b + 2*Sqrt[2]*a*b + 3*b^2
+Sqrt[2]*a + 2*a^2 + 3*Sqrt[2]*a*b + 2*b^2
+2*a + Sqrt[2]*b
+a + Sqrt[2]*b + 2*a*b + Sqrt[2]*b^2
+-Sqrt[2] - Sqrt[2]*b + 2*a*b + Sqrt[2]*b^2
+Sqrt[2] + 2*a + 3*Sqrt[2]*b + 2*a*b + Sqrt[2]*b^2
+Sqrt[2] + 2*a + 3*Sqrt[2]*b + 4*a*b + 3*Sqrt[2]*b^2
+Sqrt[2]*a + 2*a^2 + 2*b + 2*Sqrt[2]*a*b + 2*b^2
+Sqrt[2] + 2*a + Sqrt[2]*b + 2*a*b + Sqrt[2]*b^2
+-Sqrt[2] - 2*a - Sqrt[2]*b + Sqrt[2]*b^2
+Sqrt[2] + 2*a + 3*Sqrt[2]*b + Sqrt[2]*b^2
+Sqrt[2] + Sqrt[2]*b + 2*a*b + Sqrt[2]*b^2
+Sqrt[2] + 4*a + 3*Sqrt[2]*b + 2*a*b + Sqrt[2]*b^2
+Sqrt[2] + 2*a + 2*Sqrt[2]*b + a*b + Sqrt[2]*b^2
+-Sqrt[2] - 2*a - Sqrt[2]*b + 2*a*b + Sqrt[2]*b^2
+1 + Sqrt[2]*a + 2*b
+2*a + Sqrt[2]*a^2 + Sqrt[2]*b + 2*a*b + Sqrt[2]*a^2*b + Sqrt[2]*b^2 + 2*a*b^2 + Sqrt[2]*b^3
+-a + a*b + Sqrt[2]*b^2
+-2*a - Sqrt[2]*a^2 - Sqrt[2]*b - 4*a*b + Sqrt[2]*a^2*b - Sqrt[2]*b^2 + 2*a*b^2 + Sqrt[2]*b^3
+Sqrt[2]*a^2 + Sqrt[2]*b + 4*a*b + Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 2*a*b^2 + Sqrt[2]*b^3
+Sqrt[2] + 2*a + 2*Sqrt[2]*a^2 + 3*Sqrt[2]*b + 6*a*b + 3*Sqrt[2]*b^2
+-(Sqrt[2]*a^2) + Sqrt[2]*b + 2*a*b + Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 6*a*b^2 + 3*Sqrt[2]*b^3
+-a + a*b + Sqrt[2]*a^2*b + Sqrt[2]*b^2 + 3*a*b^2 + Sqrt[2]*b^3
+a + Sqrt[2]*a^2 + a*b - Sqrt[2]*b^2 - a*b^2 - Sqrt[2]*b^3
+Sqrt[2] + 3*a + 2*Sqrt[2]*b
+a + Sqrt[2]*a^2 + Sqrt[2]*b + 5*a*b + Sqrt[2]*a^2*b + 2*Sqrt[2]*b^2 + 3*a*b^2 + Sqrt[2]*b^3
+2*a + Sqrt[2]*a^2 + Sqrt[2]*b + 4*a*b + 2*Sqrt[2]*a^2*b + Sqrt[2]*b^2 + 4*a*b^2 + Sqrt[2]*b^3
+a + Sqrt[2]*b + 3*a*b + Sqrt[2]*a^2*b + 2*Sqrt[2]*b^2 + 3*a*b^2 + Sqrt[2]*b^3
+2*a + Sqrt[2]*a^2 + Sqrt[2]*b + 6*a*b + 3*Sqrt[2]*b^2 + 2*a*b^2 + Sqrt[2]*b^3
+Sqrt[2]*a^2 - Sqrt[2]*b - Sqrt[2]*b^2 - 2*a*b^2 - Sqrt[2]*b^3
+Sqrt[2] + 2*a + 2*Sqrt[2]*a^2 + Sqrt[2]*b + 4*a*b + Sqrt[2]*b^2
+Sqrt[2]*a^2 + Sqrt[2]*b + 6*a*b + 2*Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 4*a*b^2 + Sqrt[2]*b^3
+Sqrt[2] + 2*a + 2*Sqrt[2]*b + 2*a*b + Sqrt[2]*a^2*b + 2*Sqrt[2]*b^2 + 2*a*b^2 + Sqrt[2]*b^3
+a + Sqrt[2]*a^2 + Sqrt[2]*b + 3*a*b + 2*Sqrt[2]*b^2 + a*b^2 + Sqrt[2]*b^3
+-Sqrt[2] - 2*a - 2*Sqrt[2]*b + Sqrt[2]*a^2*b + 2*a*b^2 + Sqrt[2]*b^3
+Sqrt[2] + 4*a + 2*Sqrt[2]*a^2 + 4*Sqrt[2]*b + 8*a*b + Sqrt[2]*a^2*b + 4*Sqrt[2]*b^2 + 2*a*b^2 + Sqrt[2]*b^3
+Sqrt[2] + 4*a + 2*Sqrt[2]*a^2 + 3*Sqrt[2]*b + 6*a*b + 3*Sqrt[2]*b^2
+Sqrt[2] + 4*a + 2*Sqrt[2]*a^2 + 4*Sqrt[2]*b + 10*a*b + Sqrt[2]*a^2*b + 6*Sqrt[2]*b^2 + 6*a*b^2 + 3*Sqrt[2]*b^3
+Sqrt[2] + 2*a + Sqrt[2]*a^2 + 3*Sqrt[2]*b + 4*a*b + Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 4*a*b^2 + 2*Sqrt[2]*b^3
+Sqrt[2] + Sqrt[2]*a^2 + Sqrt[2]*b + 2*a*b + Sqrt[2]*b^2
+Sqrt[2] + 2*a + Sqrt[2]*a^2 + Sqrt[2]*b + 2*a*b + Sqrt[2]*b^2
+Sqrt[2] + 3*a + Sqrt[2]*a^2 + 3*Sqrt[2]*b + 5*a*b + 2*Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 5*a*b^2 + 2*Sqrt[2]*b^3
+Sqrt[2] + 4*a + Sqrt[2]*a^2 + 3*Sqrt[2]*b + 6*a*b + 2*Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 6*a*b^2 + 2*Sqrt[2]*b^3
+Sqrt[2] + 2*a + Sqrt[2]*a^2 + 2*Sqrt[2]*b + 4*a*b + 2*Sqrt[2]*a^2*b + 2*Sqrt[2]*b^2 + 4*a*b^2 + Sqrt[2]*b^3
+Sqrt[2] + 2*a + 3*Sqrt[2]*b + 4*a*b + Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 4*a*b^2 + 2*Sqrt[2]*b^3
+-Sqrt[2] - 2*a - Sqrt[2]*a^2 - 3*Sqrt[2]*b - 4*a*b + Sqrt[2]*a^2*b - 3*Sqrt[2]*b^2 + 2*a*b^2
+Sqrt[2] + 2*a + Sqrt[2]*a^2 + 3*Sqrt[2]*b + 6*a*b + Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 2*a*b^2
+Sqrt[2] + 2*a - Sqrt[2]*a^2 + 3*Sqrt[2]*b + 2*a*b + Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 4*a*b^2 + 2*Sqrt[2]*b^3
+Sqrt[2] + 2*a + Sqrt[2]*a^2 + 3*Sqrt[2]*b + 4*a*b + 3*Sqrt[2]*b^2
+-Sqrt[2] - 3*a - Sqrt[2]*a^2 - 3*Sqrt[2]*b - 5*a*b + Sqrt[2]*a^2*b - 3*Sqrt[2]*b^2 + a*b^2
+-Sqrt[2] - 4*a - Sqrt[2]*a^2 - 4*Sqrt[2]*b - 6*a*b + Sqrt[2]*a^2*b - 4*Sqrt[2]*b^2 - Sqrt[2]*b^3
+Sqrt[2] + 2*a + Sqrt[2]*a^2 + 2*Sqrt[2]*b + 4*a*b + 2*Sqrt[2]*b^2 + 2*a*b^2 + Sqrt[2]*b^3
+-Sqrt[2] - 2*a - 3*Sqrt[2]*b - 2*a*b + Sqrt[2]*a^2*b - 3*Sqrt[2]*b^2 + 2*a*b^2
+Sqrt[2] + 3*a + 2*Sqrt[2]*a^2 + 3*Sqrt[2]*b + 7*a*b + Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + a*b^2
+2*a + 2*Sqrt[2]*a^2 + Sqrt[2]*b + 6*a*b + Sqrt[2]*a^2*b + Sqrt[2]*b^2 - Sqrt[2]*b^3
+Sqrt[2] + 2*a + Sqrt[2]*a^2 + 2*Sqrt[2]*b + 2*a*b - 2*a*b^2 - Sqrt[2]*b^3
+Sqrt[2] + 4*a + 2*Sqrt[2]*a^2 + 3*Sqrt[2]*b + 8*a*b + Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 2*a*b^2
+Sqrt[2] + 4*a + 2*Sqrt[2]*a^2 + 3*Sqrt[2]*b + 8*a*b + 3*Sqrt[2]*b^2
+Sqrt[2] + 4*a + 2*Sqrt[2]*a^2 + 3*Sqrt[2]*b + 4*a*b + Sqrt[2]*b^2
+-Sqrt[2] + 2*Sqrt[2]*a^2 - Sqrt[2]*b + 4*a*b + Sqrt[2]*b^2
+-Sqrt[2] - 2*a + Sqrt[2]*a^2 - 2*Sqrt[2]*b + 2*a*b + 2*Sqrt[2]*a^2*b + 4*a*b^2 + Sqrt[2]*b^3
+Sqrt[2] + 4*a + 2*Sqrt[2]*a^2 + 3*Sqrt[2]*b + 6*a*b + Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 4*a*b^2 + 2*Sqrt[2]*b^3
+a + Sqrt[2]*a^2 + 3*a*b + Sqrt[2]*a^2*b + Sqrt[2]*b^2 + 3*a*b^2 + Sqrt[2]*b^3
+a^2 + Sqrt[2]*a*b + b^2
+1 + Sqrt[2]*a + a^2 + 2*b + 2*Sqrt[2]*a*b + 2*b^2
+1 + Sqrt[2]*a + a^2 + b + Sqrt[2]*a*b + b^2
+2*Sqrt[2]*a^2 + 2*a^3 + Sqrt[2]*b + 6*a*b + 3*Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 4*a*b^2 + Sqrt[2]*b^3
+2*a + 3*Sqrt[2]*a^2 + 2*a^3 + Sqrt[2]*b + 6*a*b + 2*Sqrt[2]*a^2*b + Sqrt[2]*b^2 - Sqrt[2]*b^3
+Sqrt[2]*a^2 + 2*a^3 + Sqrt[2]*b + 4*a*b + 4*Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 8*a*b^2 + 3*Sqrt[2]*b^3
+Sqrt[2] + 4*a + 3*Sqrt[2]*a^2 + 3*Sqrt[2]*b + 8*a*b + 3*Sqrt[2]*b^2
+-a + a^3 + a*b + 2*Sqrt[2]*a^2*b + Sqrt[2]*b^2 + 3*a*b^2 + Sqrt[2]*b^3
+a + Sqrt[2]*a^2 + a^3 + a*b + Sqrt[2]*a^2*b - Sqrt[2]*b^2 - a*b^2 - Sqrt[2]*b^3
+a + Sqrt[2]*a^2 + 3*a*b + Sqrt[2]*b^2
+2*a + 2*Sqrt[2]*a^2 + Sqrt[2]*b + 6*a*b + Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 2*a*b^2 + Sqrt[2]*b^3
+1 + Sqrt[2]*a + a^2 + 3*b + 2*Sqrt[2]*a*b + 3*b^2
+2*a + 3*Sqrt[2]*a^2 + 2*a^3 + Sqrt[2]*b + 8*a*b + 6*Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 10*a*b^2 + 3*Sqrt[2]*b^3
+Sqrt[2]*a^2 + 2*a^3 - Sqrt[2]*b + 2*a*b + 4*Sqrt[2]*a^2*b - Sqrt[2]*b^2 + 6*a*b^2 + Sqrt[2]*b^3
+2*Sqrt[2]*a^2 + 2*a^3 - Sqrt[2]*b + 2*a*b + 5*Sqrt[2]*a^2*b - Sqrt[2]*b^2 + 6*a*b^2 + Sqrt[2]*b^3
+a + Sqrt[2]*a^2 + a^3 + 3*a*b + 2*Sqrt[2]*a^2*b + Sqrt[2]*b^2 + 3*a*b^2 + Sqrt[2]*b^3
+a + 2*Sqrt[2]*a^2 + a^3 + 5*a*b + 3*Sqrt[2]*a^2*b + Sqrt[2]*b^2 + 5*a*b^2 + Sqrt[2]*b^3
+2*a + 3*Sqrt[2]*a^2 + 2*a^3 + Sqrt[2]*b + 8*a*b + 3*Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 4*a*b^2 + Sqrt[2]*b^3
+2*a + 3*Sqrt[2]*a^2 + 2*a^3 + Sqrt[2]*b + 10*a*b + 7*Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 12*a*b^2 + 3*Sqrt[2]*b^3
+Sqrt[2]*a^2 + 2*a^3 + Sqrt[2]*b + 2*a*b + 3*Sqrt[2]*a^2*b + Sqrt[2]*b^2 + 4*a*b^2 + Sqrt[2]*b^3
+Sqrt[2]*a^2 + 2*a^3 - Sqrt[2]*b + 3*Sqrt[2]*a^2*b - Sqrt[2]*b^2 + 4*a*b^2 + Sqrt[2]*b^3
+a + 2*Sqrt[2]*a^2 + 2*a^3 + 5*a*b + 4*Sqrt[2]*a^2*b + Sqrt[2]*b^2 + 5*a*b^2 + Sqrt[2]*b^3
+a + Sqrt[2]*a^2 + Sqrt[2]*b + 2*a*b + Sqrt[2]*b^2
+1 + Sqrt[2]*a + a^2 + 2*b + Sqrt[2]*a*b + b^2
+a + 2*Sqrt[2]*a^2 + a^3 + Sqrt[2]*b + 5*a*b + 2*Sqrt[2]*a^2*b + 2*Sqrt[2]*b^2 + 3*a*b^2 + Sqrt[2]*b^3
+a + Sqrt[2]*a^2 + a^3 + Sqrt[2]*b + 3*a*b + 2*Sqrt[2]*a^2*b + 2*Sqrt[2]*b^2 + 3*a*b^2 + Sqrt[2]*b^3
+a + Sqrt[2]*a^2 + a^3 + Sqrt[2]*b + 5*a*b + 3*Sqrt[2]*a^2*b + 2*Sqrt[2]*b^2 + 5*a*b^2 + Sqrt[2]*b^3
+-a + a^3 - Sqrt[2]*b - 3*a*b + Sqrt[2]*a^2*b - 2*Sqrt[2]*b^2 - a*b^2 - Sqrt[2]*b^3
+a + 2*Sqrt[2]*a^2 + 2*a^3 + Sqrt[2]*b + 5*a*b + 4*Sqrt[2]*a^2*b + 2*Sqrt[2]*b^2 + 5*a*b^2 + Sqrt[2]*b^3
+Sqrt[2] + 4*a + 3*Sqrt[2]*a^2 + 2*a^3 + 4*Sqrt[2]*b + 10*a*b + 4*Sqrt[2]*a^2*b + 4*Sqrt[2]*b^2 + 6*a*b^2 + Sqrt[2]*b^3
+-Sqrt[2] - 2*a - Sqrt[2]*a^2 - 2*Sqrt[2]*b - 2*a*b + Sqrt[2]*a^2*b + 2*a*b^2 + Sqrt[2]*b^3
+Sqrt[2] + 4*a + 3*Sqrt[2]*a^2 + 2*a^3 + 4*Sqrt[2]*b + 10*a*b + 5*Sqrt[2]*a^2*b + 4*Sqrt[2]*b^2 + 6*a*b^2 + Sqrt[2]*b^3
+Sqrt[2] + 4*a + 3*Sqrt[2]*a^2 + 2*a^3 + 4*Sqrt[2]*b + 12*a*b + 6*Sqrt[2]*a^2*b + 6*Sqrt[2]*b^2 + 10*a*b^2 + 3*Sqrt[2]*b^3
+Sqrt[2] + 2*a + Sqrt[2]*a^2 + 2*Sqrt[2]*b + 3*a*b + Sqrt[2]*b^2
+Sqrt[2] + 3*a + 2*Sqrt[2]*a^2 + 2*a^3 + 3*Sqrt[2]*b + 7*a*b + 4*Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 7*a*b^2 + 2*Sqrt[2]*b^3
+Sqrt[2] + 2*a + 2*Sqrt[2]*a^2 + 2*a^3 + 2*Sqrt[2]*b + 6*a*b + 3*Sqrt[2]*a^2*b + 2*Sqrt[2]*b^2 + 4*a*b^2 + Sqrt[2]*b^3
+Sqrt[2] + 4*a + 2*Sqrt[2]*a^2 + 2*a^3 + 3*Sqrt[2]*b + 8*a*b + 5*Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 8*a*b^2 + 2*Sqrt[2]*b^3
+Sqrt[2] + 4*a + 3*Sqrt[2]*a^2 + 2*a^3 + 3*Sqrt[2]*b + 8*a*b + 5*Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 8*a*b^2 + 2*Sqrt[2]*b^3
+1 + a^2 + b + Sqrt[2]*a*b + b^2
+Sqrt[2] + 2*a + Sqrt[2]*a^2 + 3*Sqrt[2]*b + 6*a*b + 2*Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 6*a*b^2 + 2*Sqrt[2]*b^3
+Sqrt[2] + a
+Sqrt[2] + 4*a + 4*Sqrt[2]*a^2 + 2*a^3 + 3*Sqrt[2]*b + 10*a*b + 3*Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 2*a*b^2
+Sqrt[2] + 4*a + 3*Sqrt[2]*a^2 + 2*a^3 + 3*Sqrt[2]*b + 10*a*b + 4*Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 4*a*b^2
+-Sqrt[2] - 2*a + 2*a^3 - 2*Sqrt[2]*b + 3*Sqrt[2]*a^2*b + 4*a*b^2 + Sqrt[2]*b^3
+Sqrt[2] + 4*a + 3*Sqrt[2]*a^2 + 2*a^3 + 3*Sqrt[2]*b + 8*a*b + 3*Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 2*a*b^2
+Sqrt[2] + 4*a + 3*Sqrt[2]*a^2 + 2*a^3 + 3*Sqrt[2]*b + 10*a*b + 5*Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 8*a*b^2 + 2*Sqrt[2]*b^3
+-Sqrt[2] - 2*a + Sqrt[2]*a^2 + 2*a^3 - 2*Sqrt[2]*b + 2*a*b + 3*Sqrt[2]*a^2*b + 4*a*b^2 + Sqrt[2]*b^3
+Sqrt[2] + 2*a + 2*Sqrt[2]*a^2 + 2*a^3 + 3*Sqrt[2]*b + 6*a*b + 5*Sqrt[2]*a^2*b + 3*Sqrt[2]*b^2 + 8*a*b^2 + 2*Sqrt[2]*b^3
+-Sqrt[2] - 2*a + Sqrt[2]*a^2 + 2*a^3 - 3*Sqrt[2]*b - 2*a*b + 4*Sqrt[2]*a^2*b - 3*Sqrt[2]*b^2 + 4*a*b^2
+-Sqrt[2] - 2*a + 2*a^3 - 3*Sqrt[2]*b - 4*a*b + 3*Sqrt[2]*a^2*b - 3*Sqrt[2]*b^2 + 2*a*b^2
+Sqrt[2] - a
+-Sqrt[2] - 4*a - Sqrt[2]*a^2 + 2*a^3 - 4*Sqrt[2]*b - 6*a*b + 2*Sqrt[2]*a^2*b - 4*Sqrt[2]*b^2 - Sqrt[2]*b^3
+-Sqrt[2] - 4*a - Sqrt[2]*a^2 + 2*a^3 - 3*Sqrt[2]*b - 6*a*b + 3*Sqrt[2]*a^2*b - 3*Sqrt[2]*b^2 + 2*a*b^2
+Sqrt[2] + 4*a + 3*Sqrt[2]*a^2 + 2*a^3 + 4*Sqrt[2]*b + 12*a*b + 4*Sqrt[2]*a^2*b + 6*Sqrt[2]*b^2 + 8*a*b^2 + 3*Sqrt[2]*b^3
+Sqrt[2] + 4*a + 2*Sqrt[2]*a^2 + 2*a^3 + 4*Sqrt[2]*b + 8*a*b + 3*Sqrt[2]*a^2*b + 4*Sqrt[2]*b^2 + 4*a*b^2 + Sqrt[2]*b^3
+Sqrt[2] + a + 2*Sqrt[2]*b
+Sqrt[2] + 4*a + 4*Sqrt[2]*a^2 + 2*a^3 + 4*Sqrt[2]*b + 14*a*b + 7*Sqrt[2]*a^2*b + 6*Sqrt[2]*b^2 + 12*a*b^2 + 3*Sqrt[2]*b^3
