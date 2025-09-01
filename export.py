@@ -30,10 +30,13 @@ def ExportToOFF(vertices, face, group, directory, name):
         file.write(str(len(f))+" "+" ".join(str(i) for i in f)+"\n")
 
 #Add a line to the summary.txt file for the given noble polyhedron.
-def WriteSummary(name, polynomial):
+def WriteSummary(name, polynomial, secondParameter = False):
     summary = open("3dmodels/summary.txt","a")
     
-    summary.write("The parameter of the "+name+" orbit is a positive root of the following polynomial: "+str(polynomial)+"\n")
+    if secondParameter:
+        summary.write("The parameters of the "+name+" orbit are the positive roots of the following polynomials: "+str(polynomial[0])+" and "+str(polynomial[1])+"\n")
+    else:
+        summary.write("The parameter of the "+name+" orbit is a positive root of the following polynomial: "+str(polynomial)+"\n")
     
     summary.close()
 

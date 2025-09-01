@@ -9,14 +9,17 @@ The following programs may be run if you want to test the enumeration yourself:
   * `enumerate1D-A.py`
   * `enumerate1D-B.wls`
   * `enumerate1D-C.py`
-* The enumeration for orbit types with 2 degrees of freedom is not yet complete. At the moment, you may validate that there are no noble polyhedra in nonmaximal critical equivalence classes by running the following files in order:
+* To enumerate all noble polyhedra in orbit types with 2 degrees of freedom, run the following files in order:
   * `initialize2D-A.py`
   * `initialize2D-B.wls`
   * `initialize2D-C.py`
   * `enumerate2D-A.py`
-
+  * `enumerate2D-B.py`
+  * `enumerate2D-C.wls`
+  * `enumerate2D-D.wls`
+  * `enumerate2D-E.py`
 All files and other relevant data will be placed in the `3dmodels` folder when exported. Noble polyhedra are exported in the .OFF format, and additional data on the minimal polynomials of the locations of the orbits of these noble polyhedra will be exported into a `summary.txt` file.
 
 ## Additional resources
-Additionally, there is a `library` folder containing .OFF files for all noble polyhedra, as well as the data for the minimal polynomials of their locations.
+Additionally, there is a `library` folder containing .OFF files for all noble polyhedra, as well as the data for the minimal polynomials of their locations and the necessary information to reconstruct the orbits of these noble polyhedra.
 In the future there are plans to add files allowing the conversion of 3D models to other file formats and the generation of figures.

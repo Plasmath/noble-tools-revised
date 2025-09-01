@@ -3,8 +3,9 @@
 #orbit types with 2 degrees of freedom.
 
 from symbolic import *
-from faceting import FindFacetings
+from faceting import FindFacetings, Generate
 from sympy import sqrt, resultant
+from export import ExportToOFF, WriteSummary
 
 #Given the appropriate data files, imports the coprime polynomials
 #for a given orbit type and collects the necessary information to
@@ -47,12 +48,15 @@ def ExportCopr(name, copr, sharedPlanes):
 #Merges two sets of planes together, with the condition that the
 #a plane from the second set is only added to the final list if
 #it will merge with a plane from the first set.
-def SelectiveMergePlanes(mainPlanes, sharedPlanes):
+def SelectiveMergePlanes(mainPlanes, sharedPlanes, includeOtherPlanes = False):
     totalPlanes = mainPlanes.copy()
+    remainingPlanes = []
     for s in sharedPlanes:
         if any( len(s & i) > 1 for i in mainPlanes ):
             totalPlanes.append(s)
-    return MergePlanes(totalPlanes)
+        elif includeOtherPlanes:
+            remainingPlanes.append(s)
+    return MergePlanes(totalPlanes) + remainingPlanes
 
 def MergeAllWithShared(copr, sharedPlanes):
     for s in copr.keys():
@@ -121,7 +125,8 @@ def ExportCriticalPairs(name, pairs, coprList):
 def ImportPairData(name):
     f = open("data/"+name+"RootData.txt")
     
-    pairDataDict = dict() #For information about how this dictionary is structured, see enumerate2D-D.py.
+    pairDataDictA = dict() #For information about how this dictionary is structured, see enumerate2D-D.py.
+    pairDataDictB = dict()
     
     for line in f.readlines():
         split = line.split("\t") #Extract data from line
@@ -131,21 +136,187 @@ def ImportPairData(name):
         root      = float(split[3].split("`")[0]) #The actual approximate value of the root.
         precision = float(split[3].split("`")[1]) #The known precision of the value given.
         
-        pairDataDict[pair] = pairDataDict.setdefault(pair, [[],[]])
+        pairDataDictA[pair] = pairDataDictA.setdefault(pair, [])
+        pairDataDictB[pair] = pairDataDictB.setdefault(pair, [])
         if var == "a":
-            pairDataDict[pair][0].append( (root,precision) )
+            pairDataDictA[pair].append( (root,precision) )
         else:
-            pairDataDict[pair][1].append( (root,precision) )
+            pairDataDictB[pair].append( (root,precision) )
     
     #Filter situations where there are no valid values for one of a or b,
     #in which case we do not need to consider the existence of such an intersection.
-    for key in list(pairDataDict.keys()):
-        data = pairDataDict[key]
-        if len(data[0]) == 0 or len(data[1]) == 0:
-            del pairDataDict[key]
+    for key in list(pairDataDictA.keys()):
+        if len(pairDataDictA[key]) == 0 or len(pairDataDictB[key]) == 0:
+            del pairDataDictA[key]
+            del pairDataDictB[key]
     
-    return pairDataDict
+    return pairDataDictA, pairDataDictB
 
+#Returns True if the upper and lower bounds of n1 and n2 overlap.
 def AreClose(n1,n2):
     uncertainty = 10**(len(str(int(n1[0])))-int(n1[1])) + 10**(len(str(int(n2[0])))-int(n2[1]))    
     return min(n1[0],n2[0]) + uncertainty >= max(n1[0],n2[0])
+
+def GetConnectedComponent(adjDict,startNode):
+    connectedComponent = [startNode]
+    
+    nodeConnections = adjDict[startNode]
+    del adjDict[startNode]
+    while len(nodeConnections) > 0:
+        for i in nodeConnections.copy():
+            nodeConnections.remove(i)
+            
+            if i in adjDict:
+                connectedComponent.append(i)
+                nodeConnections += adjDict[i]
+                del adjDict[i]
+    
+    return connectedComponent
+
+def GetParameterValues(pairData):
+    aValues = dict()
+    bValues = dict()
+    
+    for pair in pairData[0].keys():
+        roots = pairData[0][pair]
+        for root in roots:
+            aValues[root] = aValues.setdefault(root,[]) + [pair]
+    for pair in pairData[1].keys():
+        roots = pairData[1][pair]
+        for root in roots:
+            bValues[root] = bValues.setdefault(root,[]) + [pair]
+    
+    return aValues, bValues
+
+def ImportIntersectionData(name):
+    data = open("data/"+name+"Intersections.txt").readlines()
+    data = [eval(i.replace("{","[").replace("}","]")) for i in data]
+    
+    intersectionDict = dict()
+    for pair, intersections in data:
+        for intersection in intersections:
+            intersectionDict[tuple(intersection)] = intersectionDict.setdefault(tuple(intersection), []) + [pair]
+    
+    return intersectionDict
+
+def ImportFacetingData(name):
+    polynomialsFile = open("data/"+name+"CoprList.txt")
+    coprFile = open("data/"+name+"Copr.txt").readlines()
+    copr = eval(coprFile[0])
+    sharedPlanes = eval(coprFile[1])
+    
+    polynomials = []
+    for i in polynomialsFile.readlines():
+        line = i.replace("^","**").replace("Sqrt[2]","sp.sqrt(2)").replace("Sqrt[5]","sp.sqrt(5)").replace("\n","")
+        polynomials.append(eval(line))
+    
+    return polynomials, copr, sharedPlanes
+
+def DetermineIntersectionData(intersections, poly, copr, sharedPlanes):
+    intersectionData = dict([])
+    keys = list(intersections.keys())
+    for n in range(len(keys)):
+        k = keys[n]
+        
+        pairs = intersections[k]
+        curves = set(sum(pairs, []))
+        
+        mergedPlanes = []
+        for i in curves:
+            mergedPlanes = MergePlanes(mergedPlanes + copr[poly[i-1]])
+        
+        intersectionData[k] = SelectiveMergePlanes(mergedPlanes, sharedPlanes, includeOtherPlanes=True)
+        
+    return intersectionData
+
+#Finds the set of faces containing the 0 (initial) vertex and equivalent to the given face.
+def EquivalentFaces(face, group):
+    faces = [f for f in Generate(face,group) if 0 in f]
+    permutedFaces = [] #We want the first vertex of our face to be the initial vertex
+    for f in faces:
+        i = f.index(0)
+        g = f[i+1:]+f[:i]
+        
+        permutedFaces.append([0]+list(g))
+        permutedFaces.append([0]+list(reversed(g)))
+    return permutedFaces
+
+def Get2DOrbitTypeFacetings(orbitType, planesDictionary, group):
+    totalFacetings = []
+    
+    for i,j in planesDictionary.keys():
+        facetings = []
+        planes = planesDictionary[(i,j)]
+        for p in planes:
+            facetings += FindFacetings(len(orbitType), group, [0]+list(p), minCycleLength=4)
+        
+        if len(facetings) > 0:
+            totalFacetings.append((i,j,facetings))
+    
+    #Filter facetings equivalent under symmetry
+    totalFacetingsFiltered = []
+    for root in totalFacetings:
+        faces = root[2]
+        
+        totalRootFacetings = []
+        checkedFaces = []
+        for f in faces:
+            if f in checkedFaces:
+                continue
+            
+            checkedFaces += EquivalentFaces(f, group)
+            totalRootFacetings.append(f)
+        
+        totalFacetingsFiltered.append((root[0],root[1],totalRootFacetings))
+    
+    return totalFacetingsFiltered
+
+def ImportAtlasData(name):
+    atlasFile = open("data/"+name+"Atlas.txt")
+    
+    lines = atlasFile.readlines()
+    
+    aValues = [float(i.split("`")[0]) for i in lines[0][1:-1].split(",")]
+    bValues = [float(i.split("`")[0]) for i in lines[3][1:-1].split(",")]
+    
+    aPolynomials = []
+    for i in lines[1][1:-2].split(","):
+        aPolynomials.append( eval(i[:-4].replace("^","**").replace("Sqrt[2]","sp.sqrt(2)").replace("Sqrt[5]","sp.sqrt(5)").replace("Sqrt[10]","sp.sqrt(10)")) )
+    
+    bPolynomials = []
+    for i in lines[4][1:-2].split(","):
+        bPolynomials.append( eval(i[:-4].replace("^","**").replace("Sqrt[2]","sp.sqrt(2)").replace("Sqrt[5]","sp.sqrt(5)").replace("Sqrt[10]","sp.sqrt(10)")) )
+    
+    atlas = [aValues, aPolynomials, bValues, bPolynomials]
+    
+    return atlas
+
+#Substitutes the values of two constants for the parameters of
+#a given orbit type with 2 degree of freedom.
+def DeepEval2D(orbitType,aVal,bVal):
+    return [[p[0].evalf(subs={a:aVal, b:bVal}),
+             p[1].evalf(subs={a:aVal, b:bVal}),
+             p[2].evalf(subs={a:aVal, b:bVal})] for p in orbitType]
+
+def Export2DOrbitTypeFacetings(orbitType, atlas, facetings, group, directory, name):
+    aValues, aPolynomials, bValues, bPolynomials = atlas
+    
+    for vertexSet in facetings:
+        aAtlasIndex, bAtlasIndex, faces = vertexSet
+        
+        aValue = aValues[aAtlasIndex - 1]
+        aPoly = aPolynomials[aAtlasIndex - 1]
+        bValue = bValues[bAtlasIndex - 1]
+        bPoly = bPolynomials[bAtlasIndex - 1]
+        
+        vertices = DeepEval2D(orbitType, aValue, bValue)
+        
+        for i in range(len(faces)):
+            face = faces[i]
+            print("Exporting faceting",face,"of",name,"at",[aValue,bValue])
+            
+            fileName = name+"."+str(aValue)+"."+str(bValue)+"."+str(i)
+            
+            ExportToOFF(vertices, face, group, directory, fileName)
+            WriteSummary(fileName, [aPoly, bPoly], secondParameter=True)
+        

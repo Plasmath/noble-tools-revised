@@ -1,0 +1,7 @@
+The coordinates of the O orbit type may be given as
+(0, 0, sqrt(2))
+(0, sqrt(2), 0)
+(sqrt(2), 0, 0)
+(-sqrt(2), 0, 0)
+(0, -sqrt(2), 0)
+(0, 0, -sqrt(2))

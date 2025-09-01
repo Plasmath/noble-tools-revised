@@ -24,109 +24,284 @@ pairgD = Import["data/gDPairs.txt", "Table"]
 
 Print["Processing pair data..."]
 
-(* Function for pair-processing, used for all orbit types. Returns data to be exported. *)
-processPairs[pairs_, poly_] := (
-data = {};
-For[i = 1, i < Length[pairs]+1, i++,
-    If[Mod[i,2000] == 0, Print[i, " / ", Length[pairs], " pairs processed."], Null];
-    
-    ind1 = pairs[[i]][[1]];
-    ind2 = pairs[[i]][[2]];
-
-    s = ToExpression[poly[[ind1]][[1]]];
-    t = ToExpression[poly[[ind2]][[1]]];
-
-    (* We factorize these and find roots individually as otherwise the root-finding algorithm can have problems with certain large polynomials. *)
-    resA = FactorList[Resultant[s,t,a], Extension -> Sqrt[5] ];
-    resB = FactorList[Resultant[s,t,b], Extension -> Sqrt[5] ];
-
-    rootsA = {};
-    For[j = 2, j < Length[resB]+1, j++, (* We start at 2 because the first factor in the list is always a constant, which we don't consider as these do not create critical equivalence classes. *)
-        (* Add roots of factor to full list of roots. *)   
-        factor = resB[[j]][[1]] == 0;
-        If[factor == False, Continue[], Null]; (*Again, we do not consider constant factors.*)
-        
-        newRoots = a /. {ToRules[ NRoots[factor, a, PrecisionGoal -> 5, MaxIterations -> 800, Method -> "JenkinsTraub"] ]};
-
-        rootsA = Join[rootsA, newRoots];
+HasCloseRoots[roots_] := (
+    isTrue = False;
+    For[ ii = 1, ii < Length[roots]+1, ii++,
+        rootI = roots[[ii]];
+        For[ jj = ii+1, jj < Length[roots]+1, jj++,
+            rootJ = roots[[jj]];
+            If[rootI == rootJ, isTrue = True, Null];
+        ]
     ];
+    isTrue
+)
 
-    rootsB = {};
-    For[j = 2, j < Length[resA]+1, j++, (* We start at 2 because the first factor in the list is always a constant, which we don't consider as these do not create critical equivalence classes. *)
-        (* Add roots of factor to full list of roots. *)   
-        factor = resA[[j]][[1]] == 0;
-        If[factor == False, Continue[], Null]; (*Again, we do not consider constant factors.*)
+ProcessPairs[pairs_, poly_] := (
+    atlasA = {};
+    polyAtlasA = {}; (* List of polynomials in the parameter atlas, used to determine if two roots are actually the same value or just very close. *)
+    pairsAtlasA = {}; (* List of pairs which contain a certain value of a at a given location in the atlas. *)
+    atlasB = {};
+    polyAtlasB = {};
+    pairsAtlasB = {};
+
+    For[i = 1, i < Length[pairs]+1, i++,
+        If[Mod[i,1000] == 0, Print[i, " / ", Length[pairs], " pairs processed."], Null];
         
-        newRoots = b /. {ToRules[ NRoots[factor, b, PrecisionGoal -> 5, MaxIterations -> 800, Method -> "JenkinsTraub"] ]};
+        ind1 = pairs[[i]][[1]];
+        ind2 = pairs[[i]][[2]];
 
-        rootsB = Join[rootsB, newRoots];
-    ];
+        s = ToExpression[poly[[ind1]][[1]]];
+        t = ToExpression[poly[[ind2]][[1]]];
 
-    (* When either resultant is a constant, one obtains a boolean value rather than an equation.
-    As these trivially cannot have roots, we may skip this pair.*)
-    
-    For[j = 1, j < Length[rootsA]+1, j++,
-        root = rootsA[[j]];
+        (* We factorize these and find roots individually as otherwise the root-finding algorithm can have problems with certain large polynomials. *)
+        resA = FactorList[Resultant[s,t,a], Extension -> {Sqrt[2],Sqrt[5]} ];
+        resB = FactorList[Resultant[s,t,b], Extension -> {Sqrt[2],Sqrt[5]} ];
 
-        If[ PossibleZeroQ[ Im[root] ], (*Check if root precision includes the possibility of this being a real root*)
-            root = Re[root];
-            If[ Positive[root], (*Check if root is positive, given that it should be real*)
-                AppendTo[ data, {ind1, ind2, a, ToString[root, InputForm]} ], (*Indicate existence of root for a*)
-                Null,
-                AppendTo[ data, {ind1, ind2, a, ToString[root, InputForm]} ] (*Still do this in the case of an inconclusive result.*)
-            ],
-            Null
+        rootsA = {};
+        For[j = 2, j < Length[resB]+1, j++, (* We start at 2 because the first factor in the list is always a constant, which we don't consider as these do not create critical equivalence classes. *)
+            (* Add roots of factor to full list of roots. *)  
+            factor = resB[[j]][[1]] == 0; (* Factors are formatted in the form {polynomial, multiplicity}. Including only the first part of the
+                                            factor prevents multiple roots from being considered, which is very good for the creation of an atlas
+                                            of roots as it ensures that each root of this polynomial we are adding to the atlas is a unique root
+                                            of the polynomial. *)
+            If[factor == False, Continue[], Null]; (*Again, we do not consider constant factors.*)
+
+            newRoots = a /. {ToRules[ NRoots[factor, a, PrecisionGoal -> 5, MaxIterations -> 800, Method -> "JenkinsTraub"] ]};
+
+            (* If there exist two roots of a factor that are very close to each other, we must increase the precision until they are distinct and no longer overlap. *)
+            precisionAmount = 1;
+            While[HasCloseRoots[newRoots],
+                precisionAmount++;
+                newRoots = a /. {ToRules[ NRoots[factor, a, PrecisionGoal -> 5*precisionAmount, MaxIterations -> 800*precisionAmount, Method -> "JenkinsTraub"] ]};
+            ];
+
+            rootsA = Join[rootsA, Table[{root, factor}, {root, newRoots}] ];
+        ];
+        rootsA = Cases[rootsA, {root_, _} /; And[ PossibleZeroQ[ Im[root] ], Re[root] =!= 0, Negative[ Re[root] ] =!= True ] ]; (* Filter out roots which we have determined must be complex or negative. *)
+
+        (* Repeat for b *)
+        rootsB = {};
+        For[j = 2, j < Length[resA]+1, j++,
+            factor = resA[[j]][[1]] == 0;
+            If[factor == False, Continue[], Null];
+
+            newRoots = b /. {ToRules[ NRoots[factor, b, PrecisionGoal -> 5, MaxIterations -> 800, Method -> "JenkinsTraub"] ]};
+
+            precisionAmount = 1;
+            While[HasCloseRoots[newRoots],
+                precisionAmount++;
+                newRoots = b /. {ToRules[ NRoots[factor, b, PrecisionGoal -> 5*precisionAmount, MaxIterations -> 800*precisionAmount, Method -> "JenkinsTraub"] ]};
+            ];
+
+            rootsB = Join[rootsB, Table[{root, factor}, {root, newRoots}] ];
+        ];
+        rootsB = Cases[rootsB, {root_, _} /; And[ PossibleZeroQ[ Im[root] ], Re[root] =!= 0, Negative[ Re[root] ] =!= True ] ]; (* Filter out roots which we have determined must be complex or negative. *)
+
+        (* If either rootsA or rootsB has no positive roots, then the two curves cannot have an intersection in the area we are considering (pairs of positive reals). *)
+        If[Or[Length[rootsA] == 0, Length[rootsB] == 0], Continue[], Null ];
+
+        (* We now have a set of roots which give approximate coordinates for values of the a and b parameters.
+           From here, we incorporate these roots into the two atlases. *)
+        For[j = 1, j < Length[rootsA]+1, j++,
+            
+            root = rootsA[[j]][[1]];
+            polyRoot = rootsA[[j]][[2]];
+            isNewRoot = True; (* We assume it is a new root unless proven otherwise. *)
+
+            (* First, we check to see if any roots currently in the atlas overlap with the approximation of our current root.
+               If not, we may add it to the atlas as it cannot be the same root as an existing one which is there already. *)
+            For[k = 1, k < Length[atlasA]+1, k++,
+                atlasRoot = atlasA[[k]];
+
+                If[ atlasRoot == root, (*Upper and lower bounds overlap, so we must check if they are the same root or not. *)
+                    polyAtlasRoot = polyAtlasA[[k]];
+
+                    (*Quickly, we check if the polynomials of the two candidate roots are equal. If this is the case, they must be the same root.*)
+                    If[polyAtlasRoot == polyRoot,
+                        isNewRoot = False;
+                        AppendTo[pairsAtlasA[[k]], {ind1, ind2}]; (* We add the pair to the relevant list whenever we find out a given root is already in the root atlas. *)
+                        Break[],
+                    Null];
+                    (*If this fails, we check if the gcd of the two polynomials contains this root. If so, they must be the same. If not, they are different.*)
+                    gcd = PolynomialGCD[ First[polyAtlasRoot], First[polyRoot], Extension -> Automatic ] == 0;
+
+                    If[gcd == False, Continue[], Null]; (* If the gcd is a constant then the polynomials share no common factors and this may be a new root. *)
+
+                    If[Or[gcd == polyRoot, gcd == polyAtlasRoot], (* If the gcd is either of the two source polynomials, the roots of one must be a subset of the other and therefore we are converging on the same root. *)
+                        isNewRoot = False;
+                        AppendTo[pairsAtlasA[[k]], {ind1, ind2}];
+                        Break[],
+                    Null];
+
+                    gcdRoots = a /. {ToRules[ NRoots[gcd, a, PrecisionGoal -> 5, MaxIterations -> 800, Method -> "JenkinsTraub"] ]};
+
+                    precisionAmount = 1;
+                    While[HasCloseRoots[gcdRoots],
+                        precisionAmount++;
+                        gcdRoots = a /. {ToRules[ NRoots[gcd, a, PrecisionGoal -> 5*precisionAmount, MaxIterations -> 800*precisionAmount, Method -> "JenkinsTraub"] ]};
+                    ];
+                    gcdRoots = Cases[gcdRoots, root_ /; And[ PossibleZeroQ[ Im[root] ], Re[root] =!= 0, Negative[ Re[root] ] =!= True ] ]; (* Filter out roots which we have determined must be complex or negative. *)
+
+                    (* Checking to see if the gcd has the root we're looking for... *)
+                    For[l = 1, l < Length[gcdRoots]+1, l++,
+                        gcdRoot = gcdRoots[[l]];
+                        If[And[gcdRoot == atlasRoot, gcdRoot == root], (* The gcd also contains this root, so all three roots must be the same. *)
+                            isNewRoot = False;
+                            Break[],
+                        Null ];
+                    ];
+
+                    (* Break if gcd shares this root with the other polynomials.
+                       If not, the two roots are different and we must increase
+                       the precision of the two approximations so the bounds do
+                       not overlap. *)
+                    If[Not[isNewRoot],
+                        AppendTo[pairsAtlasA[[k]], {ind1, ind2}];
+                        Break[], 
+                    Null]; 
+                    
+                    While[atlasRoot == root, (* Increase precision. *)
+                        precisionAmount++;
+                        newAtlasRoot = FindRoot[polyAtlasRoot, {a,atlasRoot}, PrecisionGoal -> 5*precisionAmount, MaxIterations -> 800*precisionAmount];
+                        newRoot = FindRoot[polyRoot, {a,root}, PrecisionGoal -> 5*precisionAmount, MaxIterations -> 800*precisionAmount];
+
+                        (* Check if the new approximation is still approximating the same root. If so, set the better approximation as the value of the root. *)
+                        If[newAtlasRoot == atlasRoot,
+                            atlasRoot = newAtlasRoot,
+                            Print["Warning: struggling to obtain accurate approximation for ", polyAtlasRoot]
+                        ];
+                        If[newRoot == root,
+                            root = newRoot,
+                            Print["Warning: struggling to obtain accurate approximation for ", polyRoot]
+                        ];
+                    ];
+
+                    atlasA[[k]] = atlasRoot;
+                Null];
+            ];
+
+            If[isNewRoot, (* Add to atlas if it has passed all tests. *)
+                AppendTo[atlasA, root];
+                AppendTo[polyAtlasA, polyRoot];
+                AppendTo[pairsAtlasA, {{ind1, ind2}}],
+            Null ];
+        ];
+
+        (* Same for b *)
+        For[j = 1, j < Length[rootsB]+1, j++,
+            
+            root = rootsB[[j]][[1]];
+            polyRoot = rootsB[[j]][[2]];
+            isNewRoot = True;
+
+            For[k = 1, k < Length[atlasB]+1, k++,
+                atlasRoot = atlasB[[k]];
+
+                If[ atlasRoot == root,
+                    polyAtlasRoot = polyAtlasB[[k]];
+
+                    If[polyAtlasRoot == polyRoot,
+                        isNewRoot = False;
+                        AppendTo[pairsAtlasB[[k]], {ind1, ind2}];
+                        Break[],
+                    Null];
+                    
+                    gcd = PolynomialGCD[ First[polyAtlasRoot], First[polyRoot], Extension -> Automatic ] == 0;
+
+                    If[gcd == False, Continue[], Null];
+
+                    If[Or[gcd == polyRoot, gcd == polyAtlasRoot],
+                        isNewRoot = False;
+                        AppendTo[pairsAtlasB[[k]], {ind1, ind2}];
+                        Break[],
+                    Null];
+
+                    gcdRoots = b /. {ToRules[ NRoots[gcd, b, PrecisionGoal -> 5, MaxIterations -> 800, Method -> "JenkinsTraub"] ]};
+
+                    precisionAmount = 1;
+                    While[HasCloseRoots[gcdRoots],
+                        precisionAmount++;
+                        gcdRoots = b /. {ToRules[ NRoots[gcd, b, PrecisionGoal -> 5*precisionAmount, MaxIterations -> 800*precisionAmount, Method -> "JenkinsTraub"] ]};
+                    ];
+                    gcdRoots = Cases[gcdRoots, root_ /; And[ PossibleZeroQ[ Im[root] ], Re[root] =!= 0, Negative[ Re[root] ] =!= True ] ];
+
+                    For[l = 1, l < Length[gcdRoots]+1, l++,
+                        gcdRoot = gcdRoots[[l]];
+                        If[And[gcdRoot == atlasRoot, gcdRoot == root],
+                            isNewRoot = False;
+                            Break[],
+                        Null ];
+                    ];
+
+                    If[Not[isNewRoot],
+                        AppendTo[pairsAtlasB[[k]], {ind1, ind2}];
+                        Break[], 
+                    Null]; 
+                    
+                    While[atlasRoot == root,
+                        precisionAmount++;
+                        newAtlasRoot = FindRoot[polyAtlasRoot, {b,atlasRoot}, PrecisionGoal -> 5*precisionAmount, MaxIterations -> 800*precisionAmount];
+                        newRoot = FindRoot[polyRoot, {b,root}, PrecisionGoal -> 5*precisionAmount, MaxIterations -> 800*precisionAmount];
+
+                        If[newAtlasRoot == atlasRoot,
+                            atlasRoot = newAtlasRoot,
+                            Print["Warning: struggling to obtain accurate approximation for ", polyAtlasRoot]
+                        ];
+                        If[newRoot == root,
+                            root = newRoot,
+                            Print["Warning: struggling to obtain accurate approximation for ", polyRoot]
+                        ];
+                    ];
+
+                    atlasB[[k]] = atlasRoot;
+                Null];
+            ];
+
+            If[isNewRoot,
+                AppendTo[atlasB, root];
+                AppendTo[polyAtlasB, polyRoot];
+                AppendTo[pairsAtlasB, {{ind1, ind2}}],
+            Null ];
         ];
     ];
 
-    For[j = 1, j < Length[rootsB]+1, j++, (*Same process for b*)
-        root = rootsB[[j]];
-        If[ PossibleZeroQ[ Im[root] ],
-            root = Re[root];
-            If[ Positive[root],
-                AppendTo[ data, {ind1, ind2, b, ToString[root, InputForm]} ],
-                Null,
-                AppendTo[ data, {ind1, ind2, b, ToString[root, InputForm]} ]
-            ],
-            Null
-        ];
-    ];
-]; data)
+    output = {atlasA, polyAtlasA, pairsAtlasA, atlasB, polyAtlasB, pairsAtlasB}; output
+)
 
 (* sT orbit type *)
 Print["Processing sT orbit type..."]
-sTData = processPairs[pairsT, polysT]
-Export["data/sTRootData.txt",sTData,"Table"]
+sTData = ProcessPairs[pairsT, polysT]
+Export["data/sTAtlas.txt", sTData]
 
 (* gT orbit type *)
 Print["Processing gT orbit type..."]
-gTData = processPairs[pairgT, polygT]
-Export["data/gTRootData.txt",gTData,"Table"]
+gTData = ProcessPairs[pairgT, polygT]
+Export["data/gTAtlas.txt", gTData]
 
 (* gP orbit type *)
 Print["Processing gP orbit type..."]
-gPData = processPairs[pairgP, polygP]
-Export["data/gPRootData.txt",gPData,"Table"]
+gPData = ProcessPairs[pairgP, polygP]
+Export["data/gPAtlas.txt", gPData]
 
 (* sC orbit type *)
 Print["Processing sC orbit type..."]
-sCData = processPairs[pairsC, polysC]
-Export["data/sCRootData.txt",sCData,"Table"]
+sCData = ProcessPairs[pairsC, polysC]
+Export["data/sCAtlas.txt", sCData]
 
 (* gC orbit type *)
 Print["Processing gC orbit type..."]
-gCData = processPairs[pairgC, polygC]
-Export["data/gCRootData.txt",gCData,"Table"]
+gCData = ProcessPairs[pairgC, polygC]
+Export["data/gCAtlas.txt", gCData]
 
 (* sD orbit type *)
 Print["Processing sD orbit type..."]
-sDData = processPairs[pairsD, polysD]
-Export["data/sDRootData.txt",sDData,"Table"]
+sDData = ProcessPairs[pairsD, polysD]
+Export["data/sDAtlas.txt", sDData]
 
 (* gD orbit type *)
 Print["Processing gD orbit type..."]
-gDData = processPairs[pairgD, polygD]
-Export["data/gDRootData.txt",gDData,"Table"]
+gDData = ProcessPairs[pairgD, polygD]
+Export["data/gDAtlas.txt", gDData]
 
 Print["Finished!"]
 

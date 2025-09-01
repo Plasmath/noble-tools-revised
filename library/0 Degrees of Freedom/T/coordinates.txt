@@ -1,0 +1,5 @@
+The coordinates of the T orbit type may be given as
+(-sqrt(2)/2, sqrt(2)/2, sqrt(2)/2)
+(sqrt(2)/2, -sqrt(2)/2, sqrt(2)/2)
+(sqrt(2)/2, sqrt(2)/2, -sqrt(2)/2)
+(-sqrt(2)/2, -sqrt(2)/2, -sqrt(2)/2)
