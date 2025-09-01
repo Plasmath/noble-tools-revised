@@ -18,6 +18,7 @@ The following programs may be run if you want to test the enumeration yourself:
   * `enumerate2D-C.wls`
   * `enumerate2D-D.wls`
   * `enumerate2D-E.py`
+
 All files and other relevant data will be placed in the `3dmodels` folder when exported. Noble polyhedra are exported in the .OFF format, and additional data on the minimal polynomials of the locations of the orbits of these noble polyhedra will be exported into a `summary.txt` file.
 
 ## Additional resources
