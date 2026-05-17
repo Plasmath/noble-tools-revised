@@ -1,5 +1,5 @@
 #enumerate2D-B.py
-#Find all critical pairs within coprime polynomials.
+#Find pairs of coprime polynomials which may lead to new planes when both critical curves overlap.
 
 print("Starting!")
 

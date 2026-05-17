@@ -11,7 +11,8 @@ import time
 
 startTime = time.time()
 
-#Reprocessing stored volume configurations
+#Importing the data from our volume configuration files (created in enumerate1D-A.py)
+#into easier-to-handle Python objects.
 print("Importing volume configurations...")
 confFile = open("data/conf1d.txt","r").read().split("\n")
 
@@ -28,7 +29,8 @@ rDConf = eval(confFile[8][5:])
 importTimeA = time.time()
 print("Volume configuration import time: %s seconds." % (importTimeA - startTime))
 
-#Importing ConfFactors and ConfFactorIndices files
+#Importing ConfFactors and ConfFactorIndices files (created in enumerate1D-B.wls),
+#which allow us to construct the coprime polynomials and determine the facetings.
 print("Importing coprime polynomials...")
 
 tTFactorData = ImportCoprData("tT", tTConf)
@@ -44,7 +46,7 @@ rDFactorData = ImportCoprData("rD", rDConf)
 importTimeB = time.time()
 print("Coprime polynomial import time: %s seconds." % (importTimeB - importTimeA))
 
-#Final plane merging and export
+#Here we determine the full set of planes for each critical equivalence class.
 print("Finalizing coprime polynomials...")
 
 tTCopr = MergeAllPlanes(tTFactorData)
@@ -60,7 +62,8 @@ rDCopr = MergeAllPlanes(rDFactorData)
 finalizationTime = time.time()
 print("Coprime finalization time: %s seconds." % (finalizationTime - importTimeB))
 
-#Obtaining orbit candidates
+#We abstractly facet each coprime polynomial to obtain a set of candidate polynomials
+#which will give noble polyhedra if it can be realized faithfully and symmetrically. 
 print("Obtaining orbit candidates for small orbit types (tT,rT,rP,tO,tC,rC)...")
 tTCandidatesStar332 = Get1DOrbitCandidates(tT, tTCopr, groups.tTGroupStar332)
 tTCandidates332 = Get1DOrbitCandidates(tT, tTCopr, groups.tTGroup332)
@@ -96,7 +99,8 @@ rDCandidates532 = Get1DOrbitCandidates(rD, rDCopr, groups.rDGroup532)
 candTime = time.time()
 print("Total candidate time: %s seconds." % (candTime - finalizationTime))
 
-#Obtaining realizations
+#Here we obtain the realizations for these candidate noble polyhedra, checking that
+#they all have symmetric realizations and exporting the resulting polyhedra.
 print("Obtaining realizations for small orbit types (tT,rT,rP,tO,tC,rC)...")
 Export1DOrbitTypeFacetings(tT, tTCandidatesStar332, groups.tTGroupStar332, "3dmodels", "tTStar332")
 Export1DOrbitTypeFacetings(tT, tTCandidates332, groups.tTGroup332, "3dmodels", "tT332")

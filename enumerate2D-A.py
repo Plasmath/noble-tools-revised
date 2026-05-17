@@ -27,7 +27,7 @@ gDCopr, gDShared = ImportCopr("gD")
 importTime = time.time()
 print("Import time: %s seconds." % (importTime - startTime))
 
-#Check the minimum equivalence classes for facetings
+#Check the typical equivalence classes for facetings
 print("Checking the minimum equivalence classes...")
 
 minFacetings = []
@@ -39,8 +39,9 @@ minFacetings += FacetMinimalEquivalenceClass(symbolic.gC, gCShared, groups.gCGro
 minFacetings += FacetMinimalEquivalenceClass(symbolic.sD, sDShared, groups.sDGroup532)
 minFacetings += FacetMinimalEquivalenceClass(symbolic.gD, gDShared, groups.gDGroupStar532)
 
-#It turns out through these calculations that no noble polyhedra of
-#this form exist, so we do not need to worry about exporting them.
+#Like in the 1D case, no noble polyhedra of this form turn out to exist.
+#Therefore, we do not need to worry about exporting them, but we have this
+#error to handle the case where any are found.
 if len(minFacetings) == 0:
     print("Found 0 facetings in minimum equivalence classes, as expected.")
 else:
@@ -49,7 +50,8 @@ else:
 minEquivTime = time.time()
 print("Minimum equivalence class faceting time: %s seconds." % (minEquivTime - importTime))
 
-#Check the other nonmaximal equivalence classes for facetings
+#Check the other nonmaximal equivalence classes for facetings - there exists exactly
+#one of these for each coprime polynomial of each orbit type.
 print("Obtaining candidates for other nonmaximal equivalence classes...")
 
 candidates = []
@@ -61,8 +63,7 @@ candidates += Get2DCoprCandidates(symbolic.gC, gCCopr, gCShared, groups.gCGroupS
 candidates += Get2DCoprCandidates(symbolic.sD, sDCopr, sDShared, groups.sDGroup532)
 candidates += Get2DCoprCandidates(symbolic.gD, gDCopr, gDShared, groups.gDGroupStar532)
 
-#It turns out through these calculations that no noble polyhedra of this form
-#exist, so we do not need to worry about determining if they can be realized.
+#Again, no noble polyhedra of this form exist, but we have this exception here for logical soundness.
 if len(candidates) == 0:
     print("Found 0 candidates in other nonmaximal equivalence classes, as expected.")
 else:

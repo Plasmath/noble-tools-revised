@@ -12,6 +12,7 @@ from export import ExportAllFacetings
 startTime = time.time()
 print("Faceting orbits...")
 
+#Obtain the point coordinates of these orbit types
 T = groups.Tbase
 O = groups.Obase
 C = groups.Cbase

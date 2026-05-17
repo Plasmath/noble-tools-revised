@@ -14,7 +14,7 @@ from faceting import FacetMinimalEquivalenceClass
 
 startTime = time.time()
 
-#Volume configurations.
+#Obtain the volume configurations for the relevant orbit types.
 print("Obtaining volume configurations for small orbit types (tT,rT,rP,tO,tC,rC)...")
 tTConf = VolumeConfiguration(tT)
 rTConf = VolumeConfiguration(rT)
@@ -37,6 +37,7 @@ print("Volume configuration time: %s seconds." % (confTime-startTime))
 
 print("Faceting typical equivalence classes...")
 
+#Each orbit type contains one typical equivalence class, and we check abstractly to see if any of these have facetings.
 minFacetings = []
 for group in groups.tTGroups: #tT orbit type
     minFacetings += FacetMinimalEquivalenceClass(tT, MergePlanes(tTConf[0]), group)
@@ -59,6 +60,7 @@ for group in groups.rDGroups: #rD orbit type
 
 #It turns out through these calculations that no noble polyhedra of
 #this form exist, so we do not need to worry about exporting them.
+#Here, we throw an error in the case that this assumption was incorrect.
 if len(minFacetings) == 0:
     print("Found 0 facetings in minimum equivalence classes, as expected.")
 else:
@@ -67,6 +69,7 @@ else:
 minTime = time.time()
 print("Typical faceting time: %s seconds." % (minTime-confTime))
 
+#Export volume configurations as files in the data folder.
 print("Exporting volume configurations...")
 ExportConf(tTConf, "tT")
 ExportConf(rTConf, "rT")
