@@ -28,16 +28,15 @@ importTime = time.time()
 print("Import time: %s seconds." % (importTime - startTime))
 
 #Check the typical equivalence classes for facetings
-print("Checking the minimum equivalence classes...")
-
+print("Checking typical equivalence classes...")
 minFacetings = []
-minFacetings += FacetMinimalEquivalenceClass(symbolic.sT, sTShared, groups.sTGroup332)
-minFacetings += FacetMinimalEquivalenceClass(symbolic.gT, gTShared, groups.gTGroupStar332)
-minFacetings += FacetMinimalEquivalenceClass(symbolic.gP, gPShared, groups.gPGroup3Star2)
-minFacetings += FacetMinimalEquivalenceClass(symbolic.sC, sCShared, groups.sCGroup432)
-minFacetings += FacetMinimalEquivalenceClass(symbolic.gC, gCShared, groups.gCGroupStar432)
-minFacetings += FacetMinimalEquivalenceClass(symbolic.sD, sDShared, groups.sDGroup532)
-minFacetings += FacetMinimalEquivalenceClass(symbolic.gD, gDShared, groups.gDGroupStar532)
+minFacetings += FacetMinimalEquivalenceClass(symbolic.sT, sTShared, groups.sTGroup332) #sT orbit type
+minFacetings += FacetMinimalEquivalenceClass(symbolic.gT, gTShared, groups.gTGroupStar332) #gT orbit type
+minFacetings += FacetMinimalEquivalenceClass(symbolic.gP, gPShared, groups.gPGroup3Star2) #gP orbit type
+minFacetings += FacetMinimalEquivalenceClass(symbolic.sC, sCShared, groups.sCGroup432) #sC orbit type
+minFacetings += FacetMinimalEquivalenceClass(symbolic.gC, gCShared, groups.gCGroupStar432) #gC orbit type
+minFacetings += FacetMinimalEquivalenceClass(symbolic.sD, sDShared, groups.sDGroup532) #sD orbit type
+minFacetings += FacetMinimalEquivalenceClass(symbolic.gD, gDShared, groups.gDGroupStar532) #gD orbit type
 
 #Like in the 1D case, no noble polyhedra of this form turn out to exist.
 #Therefore, we do not need to worry about exporting them, but we have this

@@ -1,3 +1,8 @@
+# enumerate2D-E.py
+# The final step where we take the abstract faceting data found by previous
+# files and check to see which of these leads to real polyhedra. This data
+# is then exported to the 3dmodels folder.
+
 from symbolic2D import ImportAtlasData, ImportIntersectionData, ImportFacetingData, DetermineIntersectionData, Get2DOrbitTypeFacetings, Export2DOrbitTypeFacetings
 import symbolic2D
 import time
@@ -6,6 +11,7 @@ import groups
 print("Starting!")
 startTime = time.time()
 
+# Obtain the atlases of roots for the orbit types
 sTAtlasData = ImportAtlasData("sT")
 gTAtlasData = ImportAtlasData("gT")
 gPAtlasData = ImportAtlasData("gP")

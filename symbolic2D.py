@@ -58,6 +58,7 @@ def SelectiveMergePlanes(mainPlanes, sharedPlanes, includeOtherPlanes = False):
             remainingPlanes.append(s)
     return MergePlanes(totalPlanes) + remainingPlanes
 
+#Determine the full set of planes for all the different coprime polynomials.
 def MergeAllWithShared(copr, sharedPlanes):
     for s in copr.keys():
         copr[s] = SelectiveMergePlanes(copr[s], sharedPlanes)

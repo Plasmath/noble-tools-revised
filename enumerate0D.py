@@ -40,7 +40,6 @@ ExportAllFacetings(C, groups.CGroup432, "3dmodels", "C432")
 #CO orbit type
 ExportAllFacetings(CO, groups.COGroup3Star2, "3dmodels", "CO3Star2")
 ExportAllFacetings(CO, groups.COGroupStar432, "3dmodels", "COStar432")
-
 ExportAllFacetings(CO, groups.COGroup432, "3dmodels", "CO432")
 
 #I orbit type

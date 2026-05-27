@@ -24,13 +24,14 @@ pairgD = Import["data/gDPairs.txt", "Table"]
 
 Print["Processing pair data..."]
 
+(* Determines if two roots in a set of roots are close enough that we can't determine for sure if they're distinct. *)
 HasCloseRoots[roots_] := (
     isTrue = False;
     For[ ii = 1, ii < Length[roots]+1, ii++,
-        rootI = roots[[ii]];
+        rootI = roots[[ii]]; (* first root for comparison *)
         For[ jj = ii+1, jj < Length[roots]+1, jj++,
-            rootJ = roots[[jj]];
-            If[rootI == rootJ, isTrue = True, Null];
+            rootJ = roots[[jj]]; (* second root for comparison *)
+            If[rootI == rootJ, isTrue = True, Null]; (* == evaluates to true if their upper and lower bounds overlap  *)
         ]
     ];
     isTrue
