@@ -102,36 +102,36 @@ print("Total candidate time: %s seconds." % (candTime - finalizationTime))
 #Here we obtain the realizations for these candidate noble polyhedra, checking that
 #they all have symmetric realizations and exporting the resulting polyhedra.
 print("Obtaining realizations for small orbit types (tT,rT,rP,tO,tC,rC)...")
-Export1DOrbitTypeFacetings(tT, tTCandidatesStar332, groups.tTGroupStar332, "3dmodels", "tTStar332")
-Export1DOrbitTypeFacetings(tT, tTCandidates332, groups.tTGroup332, "3dmodels", "tT332")
+Export1DOrbitTypeFacetings(tT, tTCandidatesStar332, groups.tTGroupStar332, "3dmodels", "tTStar332") #tT under *332 symmetry
+Export1DOrbitTypeFacetings(tT, tTCandidates332, groups.tTGroup332, "3dmodels", "tT332") #tT under 332 symmetry
 
-Export1DOrbitTypeFacetings(rT, rTCandidatesStar332, groups.rTGroupStar332, "3dmodels", "rTStar332")
-Export1DOrbitTypeFacetings(rT, rTCandidates332, groups.rTGroup332, "3dmodels", "rT332")
+Export1DOrbitTypeFacetings(rT, rTCandidatesStar332, groups.rTGroupStar332, "3dmodels", "rTStar332") #rT under *332 symmetry
+Export1DOrbitTypeFacetings(rT, rTCandidates332, groups.rTGroup332, "3dmodels", "rT332") #rT under 332 symmetry
 
-Export1DOrbitTypeFacetings(rP, rPCandidates3Star2, groups.rPGroup3Star2, "3dmodels", "rP3Star2")
+Export1DOrbitTypeFacetings(rP, rPCandidates3Star2, groups.rPGroup3Star2, "3dmodels", "rP3Star2") #rP under 3*2 symmetry
 
-Export1DOrbitTypeFacetings(tO, tOCandidatesStar432, groups.tOGroupStar432, "3dmodels", "tOStar432")
-Export1DOrbitTypeFacetings(tO, tOCandidates432, groups.tOGroup432, "3dmodels", "tO432")
+Export1DOrbitTypeFacetings(tO, tOCandidatesStar432, groups.tOGroupStar432, "3dmodels", "tOStar432") #tO under *432 symmetry
+Export1DOrbitTypeFacetings(tO, tOCandidates432, groups.tOGroup432, "3dmodels", "tO432") #tO under 432 symmetry
 
-Export1DOrbitTypeFacetings(tC, tCCandidatesStar432, groups.tCGroupStar432, "3dmodels", "tCStar432")
-Export1DOrbitTypeFacetings(tC, tCCandidates432, groups.tCGroup432, "3dmodels", "tC432")
-Export1DOrbitTypeFacetings(tC, tCCandidates3Star2, groups.tCGroup3Star2, "3dmodels", "tC3Star2")
+Export1DOrbitTypeFacetings(tC, tCCandidatesStar432, groups.tCGroupStar432, "3dmodels", "tCStar432") #tC under *432 symmetry
+Export1DOrbitTypeFacetings(tC, tCCandidates432, groups.tCGroup432, "3dmodels", "tC432") #tC under 432 symmetry
+Export1DOrbitTypeFacetings(tC, tCCandidates3Star2, groups.tCGroup3Star2, "3dmodels", "tC3Star2") #tC under 3*2 symmetry
 
-Export1DOrbitTypeFacetings(rC, rCCandidatesStar432, groups.rCGroupStar432, "3dmodels", "rCStar432")
-Export1DOrbitTypeFacetings(rC, rCCandidates432, groups.rCGroup432, "3dmodels", "rC432")
-Export1DOrbitTypeFacetings(rC, rCCandidates3Star2, groups.rCGroup3Star2, "3dmodels", "rC3Star2")
+Export1DOrbitTypeFacetings(rC, rCCandidatesStar432, groups.rCGroupStar432, "3dmodels", "rCStar432") #rC under *432 symmetry
+Export1DOrbitTypeFacetings(rC, rCCandidates432, groups.rCGroup432, "3dmodels", "rC432") #rC under 432 symmetry
+Export1DOrbitTypeFacetings(rC, rCCandidates3Star2, groups.rCGroup3Star2, "3dmodels", "rC3Star2") #rC under 3*2 symmetry
 
 print("Obtaining realizations for tI orbit type...")
-Export1DOrbitTypeFacetings(tI, tICandidatesStar532, groups.tIGroupStar532, "3dmodels", "tIStar532")
-Export1DOrbitTypeFacetings(tI, tICandidates532, groups.tIGroup532, "3dmodels", "tI532")
+Export1DOrbitTypeFacetings(tI, tICandidatesStar532, groups.tIGroupStar532, "3dmodels", "tIStar532") #tI under *532 symetry
+Export1DOrbitTypeFacetings(tI, tICandidates532, groups.tIGroup532, "3dmodels", "tI532") #tI under 532 symmetry
 
 print("Obtaining realizations for tD orbit type...")
-Export1DOrbitTypeFacetings(tD, tDCandidatesStar532, groups.tDGroupStar532, "3dmodels", "tDStar532")
-Export1DOrbitTypeFacetings(tD, tDCandidates532, groups.tDGroup532, "3dmodels", "tD532")
+Export1DOrbitTypeFacetings(tD, tDCandidatesStar532, groups.tDGroupStar532, "3dmodels", "tDStar532") #tD under *532 symmetry
+Export1DOrbitTypeFacetings(tD, tDCandidates532, groups.tDGroup532, "3dmodels", "tD532") #tD under 532 symmetry
 
 print("Obtaining realizations for rD orbit type...")
-Export1DOrbitTypeFacetings(rD, rDCandidatesStar532, groups.rDGroupStar532, "3dmodels", "rDStar532")
-Export1DOrbitTypeFacetings(rD, rDCandidates532, groups.rDGroup532, "3dmodels", "rD532")
+Export1DOrbitTypeFacetings(rD, rDCandidatesStar532, groups.rDGroupStar532, "3dmodels", "rDStar532") #rD under *532 symmetry
+Export1DOrbitTypeFacetings(rD, rDCandidates532, groups.rDGroup532, "3dmodels", "rD532") #rD under 532 symmetry
 
 enumTime = time.time()
 print("Total realization time: %s seconds." % (enumTime - candTime))

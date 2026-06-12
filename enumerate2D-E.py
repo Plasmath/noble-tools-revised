@@ -20,6 +20,7 @@ gCAtlasData = ImportAtlasData("gC")
 sDAtlasData = ImportAtlasData("sD")
 gDAtlasData = ImportAtlasData("gD")
 
+# Import intersection data & coordinates
 sTIntersections = ImportIntersectionData("sT")
 gTIntersections = ImportIntersectionData("gT")
 gPIntersections = ImportIntersectionData("gP")
@@ -28,6 +29,7 @@ gCIntersections = ImportIntersectionData("gC")
 sDIntersections = ImportIntersectionData("sD")
 gDIntersections = ImportIntersectionData("gD")
 
+# Import comprime polynomials & their relevant abstract faceting data
 sTPoly, sTCopr, sTSharedPlanes = ImportFacetingData("sT")
 gTPoly, gTCopr, gTSharedPlanes = ImportFacetingData("gT")
 gPPoly, gPCopr, gPSharedPlanes = ImportFacetingData("gP")
@@ -39,7 +41,7 @@ gDPoly, gDCopr, gDSharedPlanes = ImportFacetingData("gD")
 importTime = time.time()
 print("Import time:",importTime - startTime)
 
-#Determine planes for faceting
+#Determine faceting data for each intersection
 sTIntersectionData = DetermineIntersectionData(sTIntersections, sTPoly, sTCopr, sTSharedPlanes)
 gTIntersectionData = DetermineIntersectionData(gTIntersections, gTPoly, gTCopr, gTSharedPlanes)
 gPIntersectionData = DetermineIntersectionData(gPIntersections, gPPoly, gPCopr, gPSharedPlanes)
@@ -51,7 +53,7 @@ gDIntersectionData = DetermineIntersectionData(gDIntersections, gDPoly, gDCopr, 
 planeTime = time.time()
 print("Time spent preparing for faceting:", planeTime - importTime)
 
-#Determine facetings
+#Determine facetings of polyhedra
 sTFacetings = Get2DOrbitTypeFacetings(symbolic2D.sT, sTIntersectionData, groups.sTGroup332)
 gTFacetings = Get2DOrbitTypeFacetings(symbolic2D.gT, gTIntersectionData, groups.gTGroupStar332)
 gPFacetings = Get2DOrbitTypeFacetings(symbolic2D.gP, gPIntersectionData, groups.gPGroup3Star2)
@@ -63,7 +65,7 @@ gDFacetings = Get2DOrbitTypeFacetings(symbolic2D.gD, gDIntersectionData, groups.
 facetingTime = time.time()
 print("Time spent faceting:", facetingTime - planeTime)
 
-#Export facetings
+#Realize facetings & export these polyhedra
 Export2DOrbitTypeFacetings(symbolic2D.sT, sTAtlasData, sTFacetings, groups.sTGroup332, "3dmodels", "sT")
 Export2DOrbitTypeFacetings(symbolic2D.gT, gTAtlasData, gTFacetings, groups.gTGroupStar332, "3dmodels", "gT")
 Export2DOrbitTypeFacetings(symbolic2D.gP, gPAtlasData, gPFacetings, groups.gPGroup3Star2, "3dmodels", "gP")

@@ -158,10 +158,11 @@ def AreClose(n1,n2):
     uncertainty = 10**(len(str(int(n1[0])))-int(n1[1])) + 10**(len(str(int(n2[0])))-int(n2[1]))    
     return min(n1[0],n2[0]) + uncertainty >= max(n1[0],n2[0])
 
+#Find the connected component of a graph that contains a given node.
 def GetConnectedComponent(adjDict,startNode):
-    connectedComponent = [startNode]
+    connectedComponent = [startNode] #List of points in connected component.
     
-    nodeConnections = adjDict[startNode]
+    nodeConnections = adjDict[startNode] #List of points that still need to be searched for additional graph connections
     del adjDict[startNode]
     while len(nodeConnections) > 0:
         for i in nodeConnections.copy():

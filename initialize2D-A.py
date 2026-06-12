@@ -10,24 +10,24 @@ import time
 
 startTime = time.time()
 
-#Volume configurations.
+#Generate the different volume configurations.
 print("Obtaining volume configurations for small orbit types (sT,gT,gP,sC,gC)...")
-sTConf = VolumeConfiguration(sT)
-gTConf = VolumeConfiguration(gT)
-gPConf = VolumeConfiguration(gP)
-sCConf = VolumeConfiguration(sC)
-gCConf = VolumeConfiguration(gC)
+sTConf = VolumeConfiguration(sT) #sT orbit type
+gTConf = VolumeConfiguration(gT) #gT orbit type
+gPConf = VolumeConfiguration(gP) #gP orbit type
+sCConf = VolumeConfiguration(sC) #sC orbit type
+gCConf = VolumeConfiguration(gC) #gC orbit type
 
 print("Obtaining volume configuration for sD orbit type...")
-sDConf = VolumeConfiguration(sD)
+sDConf = VolumeConfiguration(sD) #sD orbit type
 
 print("Obtaining volume configuratrion for gD orbit type...")
-gDConf = VolumeConfiguration(gD)
+gDConf = VolumeConfiguration(gD) #gD orbit tyoe
 
 confTime = time.time()
 print("Total volume configuration time: %s seconds." % (confTime - startTime))
 
-#Exporting
+#Export the volume configurations that we just calculated.
 print("Exporting volume configurations...")
 ExportConf(sTConf, "sT", dim = 2)
 ExportConf(gTConf, "gT", dim = 2)

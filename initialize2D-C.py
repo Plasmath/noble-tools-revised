@@ -11,6 +11,7 @@ from symbolic2D import ImportCoprData, MergePlanes, MergeAllPlanes, ExportCopr
 import config
 import time
 
+#Parameters from config.py
 a = config.a
 b = config.b
 

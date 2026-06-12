@@ -52,7 +52,7 @@ gD = groups.GenerateVStar532(a, b, 1)
 #[ p[0] p[1] p[2] 1 ]
 #[ q[0] q[1] q[2] 1 ]
 #[ r[0] r[1] r[2] 1 ]
-#[ s[0] s[1] s[2] 1 ], 
+#[ s[0] s[1] s[2] 1 ].
 def ConfigurationEntry(p,q,r,s):
     expr = (-p[2]*q[1]*r[0] + p[1]*q[2]*r[0] + p[2]*q[0]*r[1] - p[0]*q[2]*r[1] -
              p[1]*q[0]*r[2] + p[0]*q[1]*r[2] + p[2]*q[1]*s[0] - p[1]*q[2]*s[0] - 
@@ -127,6 +127,7 @@ def ImportCoprData(name, Conf):
     
     factors = []
     for i in factorsFile.readlines():
+        #convert from Mathematica notation to Sympy notation
         line = i.replace("^","**").replace("Sqrt[","sp.sqrt(").replace("]",")").replace("\n","")
         factors.append(eval(line))
     
@@ -144,6 +145,7 @@ def ImportCoprData(name, Conf):
         if PositiveCoeffs(factor):
             continue
         
+        # Add the faceting data of this polynomial to its relevant factor
         factorDict[factor] = factorDict.setdefault(factor, []) + Conf[poly]
     
     return factorDict

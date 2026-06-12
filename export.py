@@ -18,14 +18,16 @@ def ExportToOFF(vertices, face, group, directory, name):
     
     file = open(directory+"/"+name+".off", "w")
     
-    file.write("OFF\n")
-    file.write(str(len(vertices))+" "+str(len(faces))+" 0\n\n")
+    file.write("OFF\n") #OFF header
+    file.write(str(len(vertices))+" "+str(len(faces))+" 0\n\n") #The edge count is hard to calculate and optional, so we set it to 0 here for convenience.
     
+    #Write vertex coordinates
     for v in vertices:
         file.write(str(v[0])+" "+str(v[1])+" "+str(v[2])+"\n")
     
     file.write("\n")
     
+    #Face data
     for f in faces:
         file.write(str(len(f))+" "+" ".join(str(i) for i in f)+"\n")
 

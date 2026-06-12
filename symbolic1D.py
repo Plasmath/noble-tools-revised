@@ -67,6 +67,7 @@ def GetCopr(orbitType, extension = [sp.sqrt(2)]):
 
 #Finds the set of faces containing the 0 (initial) vertex and equivalent to the given face.
 def EquivalentFaces(face, group):
+    #This list gives the relevant set of faces, but we want the first vertex to be 0 for convenience.
     faces = [f for f in Generate(face,group) if 0 in f]
     permutedFaces = [] #We want the first vertex of our face to be the initial vertex
     for f in faces:

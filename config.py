@@ -1,5 +1,5 @@
 #config.py
-#Base file that holds a few useful shared values.
+#Base file that holds a few useful shared values between files.
 
 from sympy import Symbol
 
