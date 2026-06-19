@@ -23,4 +23,3 @@ All files and other relevant data will be placed in the `3dmodels` folder when e
 
 ## Additional resources
 Additionally, there is a `library` folder containing .OFF files for all noble polyhedra, as well as the data for the minimal polynomials of their locations and the necessary information to reconstruct the orbits of these noble polyhedra.
-In the future there are plans to add files allowing the conversion of 3D models to other file formats and the generation of figures.
