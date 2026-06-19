@@ -1,5 +1,5 @@
 # noble-tools
-A collection of programs which completes the enumeration of the noble polyhedra and assists in their visualization. In addition to the standard Python libraries, the enumeration relies on the NumPy and SymPy libraries. This is mainly programmed in Python, but in a few situations Mathematica is used instead.
+A collection of programs which completes the enumeration of the noble polyhedra and assists in their visualization. In addition to the standard Python libraries, the enumeration relies on the NumPy and SymPy libraries. This is mainly programmed in Python, but in a few situations Mathematica is used instead. All code was created by myself (no AI) - please let me know if you have any questions by adding an issue to the respository.
 
 ## Usage
 The following programs may be run if you want to test the enumeration yourself:

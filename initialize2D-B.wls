@@ -1,3 +1,8 @@
+(* initialize2D-B.wls *)
+(* Code which factorizes, for every orbit type, entries from its volume configuration
+   as much as possible. Because sqrt(2) and sqrt(5) are the only nonrational values involved
+   in our coefficients, factoring under Q[sqrt(2),sqrt(5)] is sufficient. *)
+
 #!/usr/bin/env wolframscript
 
 Off[General::stop]

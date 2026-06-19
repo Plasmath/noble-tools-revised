@@ -1,3 +1,7 @@
+(* enumerate2D-D.wls *)
+(* Now that we have found our atlases of roots (enumerate2D-C.wls), we determine which pairs of atlas values (a-value,b-value)
+   actually are intersections between critical curves. *)
+
 #!/usr/bin/env wolframscript
 
 Off[General::stop]
@@ -34,12 +38,6 @@ gDAtlasData = ReadList["data/gDAtlas.txt"]
 
 Print["Processing pair data..."]
 
-GetRoot[poly_, atlaxApprox_, var_] := (
-    For[ n = 1, n < PolynomialDegree[poly, var]+1, n++,
-        If[ atlaxApprox == Root[poly,n] ]
-    ];
-)
-
 FindIntersections[pairs_, poly_, atlasData_] := (
     atlasA = atlasData[[1]];
     polyAtlasA = atlasData[[2]];
@@ -50,11 +48,11 @@ FindIntersections[pairs_, poly_, atlasData_] := (
     
     outputData = {};
 
+    (* We look at each pair of coprime polynomials individually. *)
     For[i = 1, i < Length[pairs]+1, i++,
-        If[Mod[i,1000] == 0, Print[i, " / ", Length[pairs], " pairs processed."], Null];
+        If[Mod[i,1000] == 0, Print[i, " / ", Length[pairs], " pairs processed."], Null]; (* Display periodic progress updates *)
         
         pair = pairs[[i]];
-
         poly1 = ToExpression[poly[[pair[[1]]]][[1]]];
         poly2 = ToExpression[poly[[pair[[2]]]][[1]]];
 
@@ -74,18 +72,18 @@ FindIntersections[pairs_, poly_, atlasData_] := (
         For[ j = 1, j < Length[aValues]+1, j++,
             aIndex = aValues[[j]];
             aVal = atlasA[[aIndex]];
-            aAcc = Floor[ Accuracy[aVal] ];
+            aAcc = Floor[ Accuracy[aVal] ]; (* Round down because we don't want to overestimate precision *)
 
-            aValLowerBound = Round[aVal, 10^(-aAcc)] - 10^(-aAcc);
-            aValUpperBound = Round[aVal, 10^(-aAcc)] + 10^(-aAcc);
+            aValLowerBound = Round[aVal, 10^(-aAcc)] - 10^(-aAcc); (* Exact lower bound for this root in the atlas of a-values *)
+            aValUpperBound = Round[aVal, 10^(-aAcc)] + 10^(-aAcc); (* Exact upper bount for this root in the atlas of a-values *)
 
             For[ k = 1, k < Length[bValues]+1, k++,
                 bIndex = bValues[[k]];
                 bVal = atlasB[[bIndex]];
-                bAcc = Floor[ Accuracy[bVal] ];
+                bAcc = Floor[ Accuracy[bVal] ]; (* Round down because we don't want to overestimate precision *)
 
-                bValLowerBound = Round[bVal, 10^(-bAcc)] - 10^(-bAcc);
-                bValUpperBound = Round[bVal, 10^(-bAcc)] + 10^(-bAcc);
+                bValLowerBound = Round[bVal, 10^(-bAcc)] - 10^(-bAcc); (* Exact lower bound for this root in the atlas of b-values *)
+                bValUpperBound = Round[bVal, 10^(-bAcc)] + 10^(-bAcc); (* Exact upper bound for this root in the atlas of a-values *)
 
                 (* Here there should be two cases - either the result of Reduce is False, in which case there are no solutions,
                 or Reduce gives the value of exactly 1 intersection. *)
@@ -95,13 +93,17 @@ FindIntersections[pairs_, poly_, atlasData_] := (
                     Null,
                     If[ Or[MatchQ[red, a == _ && b == _], MatchQ[red, b == _ && a == _] ], (* If True, Reduce gave the solution we expected. *)
                     AppendTo[intersections, {aIndex, bIndex}],
-                    Print["Warning - found unexpected answer when reducing at pair", i, ". red = ", red];
+                    Print["Warning - found unexpected answer when reducing at pair", i, ". red = ", red]; (* If False, Reduce was not sufficient to determine
+													     whether this intersection really exists or not.
+													     The program will only finish running if it never
+													     runs into such a problem. *)
+		    Abort[]; (* Stop execution if Reduce was not sufficient. We know in hindsight this never happens, but we have this here for assurance. *)
                     ];
                 ];
             ];
         ];
 
-        If[Length[intersections] > 0,
+        If[Length[intersections] > 0, (* Skip pair if it has no relevant intersections *)
             AppendTo[outputData, {pair, intersections}],
         Null];
     ];

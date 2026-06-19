@@ -1,3 +1,8 @@
+(* enumerate2D-C.wls *)
+(* Code that determines the atlases of roots for each orbit type. Each root is identified by an approximate value (an upper & lower bound)
+   which does not overlap with any other root in the atlas, as well as a minimal polynomial which allows for the root's value to be 
+   determined to any level of precision. *)
+
 #!/usr/bin/env wolframscript
 
 Off[General::stop]
@@ -42,17 +47,17 @@ ProcessPairs[pairs_, poly_] := (
     polyAtlasA = {}; (* List of polynomials in the parameter atlas, used to determine if two roots are actually the same value or just very close. *)
     pairsAtlasA = {}; (* List of pairs which contain a certain value of a at a given location in the atlas. *)
     atlasB = {};
-    polyAtlasB = {};
-    pairsAtlasB = {};
+    polyAtlasB = {}; (* Same for b *)
+    pairsAtlasB = {}; (* Same for b *)
 
     For[i = 1, i < Length[pairs]+1, i++,
-        If[Mod[i,1000] == 0, Print[i, " / ", Length[pairs], " pairs processed."], Null];
+        If[Mod[i,1000] == 0, Print[i, " / ", Length[pairs], " pairs processed."], Null]; (* Periodic progress updates *)
         
         ind1 = pairs[[i]][[1]];
         ind2 = pairs[[i]][[2]];
 
-        s = ToExpression[poly[[ind1]][[1]]];
-        t = ToExpression[poly[[ind2]][[1]]];
+        s = ToExpression[poly[[ind1]][[1]]]; (* First critical curve *)
+        t = ToExpression[poly[[ind2]][[1]]]; (* Second critical curve *)
 
         (* We factorize these and find roots individually as otherwise the root-finding algorithm can have problems with certain large polynomials. *)
         resA = FactorList[Resultant[s,t,a], Extension -> {Sqrt[2],Sqrt[5]} ];
@@ -62,21 +67,22 @@ ProcessPairs[pairs_, poly_] := (
         For[j = 2, j < Length[resB]+1, j++, (* We start at 2 because the first factor in the list is always a constant, which we don't consider as these do not create critical equivalence classes. *)
             (* Add roots of factor to full list of roots. *)  
             factor = resB[[j]][[1]] == 0; (* Factors are formatted in the form {polynomial, multiplicity}. Including only the first part of the
-                                            factor prevents multiple roots from being considered, which is very good for the creation of an atlas
-                                            of roots as it ensures that each root of this polynomial we are adding to the atlas is a unique root
-                                            of the polynomial. *)
+                                            factor stops us from needing to consider roots with multiplicity, which is very good for the creation 
+					    of an atlas of roots as it ensures that each root of this polynomial we are adding to the atlas is a
+					    unique root of the polynomial. *)
             If[factor == False, Continue[], Null]; (*Again, we do not consider constant factors.*)
 
             newRoots = a /. {ToRules[ NRoots[factor, a, PrecisionGoal -> 5, MaxIterations -> 800, Method -> "JenkinsTraub"] ]};
 
-            (* If there exist two roots of a factor that are very close to each other, we must increase the precision until they are distinct and no longer overlap. *)
+            (* If there exist two roots of a factor that are very close to each other (i.e. upper and lower bounds overlap),
+	       we must increase the precision until they are distinct and no longer overlap. *)
             precisionAmount = 1;
             While[HasCloseRoots[newRoots],
                 precisionAmount++;
                 newRoots = a /. {ToRules[ NRoots[factor, a, PrecisionGoal -> 5*precisionAmount, MaxIterations -> 800*precisionAmount, Method -> "JenkinsTraub"] ]};
             ];
 
-            rootsA = Join[rootsA, Table[{root, factor}, {root, newRoots}] ];
+            rootsA = Join[rootsA, Table[{root, factor}, {root, newRoots}] ]; (* Add new roots to our existing list *)
         ];
         rootsA = Cases[rootsA, {root_, _} /; And[ PossibleZeroQ[ Im[root] ], Re[root] =!= 0, Negative[ Re[root] ] =!= True ] ]; (* Filter out roots which we have determined must be complex or negative. *)
 
@@ -167,6 +173,7 @@ ProcessPairs[pairs_, poly_] := (
                         newRoot = FindRoot[polyRoot, {a,root}, PrecisionGoal -> 5*precisionAmount, MaxIterations -> 800*precisionAmount];
 
                         (* Check if the new approximation is still approximating the same root. If so, set the better approximation as the value of the root. *)
+			(* The program will stall if it cannot find an accurate enough approximation, so by it successfully running we know it succeeded for every root. *)
                         If[newAtlasRoot == atlasRoot,
                             atlasRoot = newAtlasRoot,
                             Print["Warning: struggling to obtain accurate approximation for ", polyAtlasRoot]
